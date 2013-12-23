@@ -33,5 +33,9 @@ def index():
     return 'Hello World!'
 
 
+@app.route('/login')
+def login():
+    return 'login page'
+
 if __name__ == '__main__':
     app.run()
