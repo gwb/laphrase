@@ -17,11 +17,24 @@
   Not logged in
   {% endif %}
 
+<div>
+  <h3> Next Up </h3>
+  {% if nextup is none %}
+  {{nextup.content}}
+  {% else %}
+  No next up
+  {% endif %}
+</div>
+
+<div>
+  <h3> Pending Items </h3>
   <ul>
   {% for entry in entries %}
-    <li> {{entry.content}}
+    <li> <input type=checkbox id={{entry.id}}> {{entry.content}} </li>
   {% else %}
     <li> No entries
   {% endfor %}
   </ul>
+</div>
+
 {% endblock %}

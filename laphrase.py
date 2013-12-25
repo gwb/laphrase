@@ -29,12 +29,13 @@ def teardown_request(exception):
 
 @app.route('/')
 def index():
-    return 'Hello World!'
+    return render_template("accueil.html")
 
 
 @app.route('/login', methods=['GET','POST'])
 def login():
     if request.method == 'POST':
+        #import pdb; pdb.set_trace()
         email=request.form['email']
         password=request.form['password']
         login_infos = accutils.check_login(g.con, email, password)
@@ -47,7 +48,9 @@ def login():
         else:
             return "login failed"
     else:
-        return render_template("form_login.html")
+        return render_template("login.html")
+        #return render_template("form_login.html")
+
     
 
 @app.route('/create-account', methods=['GET', 'POST'])
@@ -62,8 +65,9 @@ def create_account():
         except IOError:
             app.logger.debug("ERROR - couldn't add account")                    
     else:
-        return render_template("form_create_account.html")
-    return "create account page"
+        return render_template("login.html")
+        #return render_template("form_create_account.html")
+    return render_template("login.html")
 
 @app.route('/add-content', methods=['GET', 'POST'])
 def add_content():
@@ -71,8 +75,15 @@ def add_content():
         if session["logged_in"]:
             entries = accutils.get_content_by_userid(g.con,
                                                      session["user_id"])
+            nextup = [entry for entry in entries if entry['next_up']]
+            if len(nextup) > 0:
+                nextup = nextup[0]
+            else:
+                nextup = None
+                
             return render_template("add_content.html",
-                                   entries=entries)
+                                   entries=entries,
+                                   nextup=nextup)
     else:
         if session['logged_in']:
             entries = accutils.get_content_by_userid(g.con,
