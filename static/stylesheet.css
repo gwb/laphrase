@@ -1,0 +1,470 @@
+/********** Mise en place des prérequis **********/
+
+@font-face
+{
+	font-family:'Oswald';
+	src: url('fonts/Oswald-Regular.otf');
+}
+
+
+@font-face
+{
+	font-family:'BebasNeue';
+	src: url('fonts/BebasNeue.otf');
+}
+
+
+
+
+body
+{
+	font-family:gill sans;
+	font-weight:300;
+	padding:0px;
+	margin:0px;
+}
+
+
+
+.separation
+{
+	height:50px;
+	width:10px;
+}
+
+
+.cache
+{
+	display:none;
+}
+
+
+.visible
+{
+	display:block;
+}
+
+
+/********** Mise en place du design du Menu ***********/
+
+#menu_top
+{
+	display:block;
+	position:relative;
+	height: 60px;
+	border:1px solid black;
+	margin:0px;
+	background:rgb(36,36,36);
+	color:white;
+}
+
+
+#titre
+{
+	font-family:courier;
+	color:white;
+	font-size:28px;
+	font-weight:500;
+	text-transform:uppercase;
+}
+
+
+#login
+{
+	position:relative;
+	float:right;
+	
+}
+
+
+
+/*********** Mise en page du design du footer **********/
+
+footer
+{
+	position:relative;
+	height:50px;
+	bottom:0px;
+	padding-top:5px;
+	background:rgb(36,36,36);
+	color:white;
+	text-align:center;
+}
+
+
+
+
+
+
+/*********** Mise en page de l'ACCUEIL **********/
+
+h1
+{
+	position:relative;
+	font-family:courier;
+	display: block;
+	margin-top:100px;
+	text-align:center;
+	font-weight:400;
+	font-size:90px;
+	color:rgba(180,180,180,0.6);
+	text-shadow: 1px 4px 6px #def, 0 0 0 #000, 1px 4px 6px #def;
+}
+
+
+h2
+{
+	position:relative;
+	font-family:courier;
+	display: block;
+	margin-top:-30px;
+	text-align:center;
+	font-weight:400;
+	font-size:20px;
+	color:rgba(180,180,180,0.6);
+	text-shadow: 1px 2px 2px #def, 0 0 0 #000, 1px 2px 2px #def;
+}
+
+
+#categories
+{
+	display:block;
+	width:1000px;
+	text-align:center;
+	margin:auto;
+	position:relative;
+	margin-top:50px;
+	margin-bottom:50px;
+}
+
+
+#categories td
+{
+	width:200px;
+	padding:20px;
+}
+
+
+.box_categorie
+{
+	cursor:pointer;
+	border-radius:5px;
+	padding:20px 10px 20px 10px;
+	height:140px;
+	overflow:hidden;
+}
+
+
+.box_categorie:hover
+{
+	cursor:pointer;
+	border:2px solid grey;
+	border-radius:5px;
+	padding:20px 10px 20px 10px;
+	margin:-4px;
+}
+
+
+.box_categorie span
+{
+	display:block;
+	font-size:18px;
+	font-weight:400;
+	margin-bottom:10px;
+	font-family:courier;
+}
+
+
+
+
+/*********** Mise en page de la page CATEGORIE **********/
+
+
+#corps_categorie
+{
+	min-height:480px;
+}
+
+
+#corps_categorie h2
+{
+	position:relative;
+	font-family:courier;
+	display: block;
+	width:800px;
+	margin:auto;
+	margin-top:-30px;
+	text-align:center;
+	font-weight:400;
+	font-size:20px;
+	color:rgba(180,180,180,0.6);
+	text-shadow: 1px 2px 2px #def, 0 0 0 #000, 1px 2px 2px #def;
+}
+
+
+#threads_categorie
+{
+	position:relative;
+	margin:auto;
+	display:block;
+	width:800px;
+	text-align:center;
+	margin-top:50px;
+	margin-bottom:50px;
+	border-collapse:collapse;
+}
+
+
+#threads_categorie td
+{
+	width:100px;
+	height:25px;
+}
+
+
+.ligne_titre
+{
+	background:rgba(0,0,0,.2);
+}
+
+
+th
+{
+	font-weight:400;
+	font-style:italic;
+	height:30px;
+}
+
+
+.ligne_impaire
+{
+	background: rgba(0,0,0,.1);
+}
+	
+	
+	
+
+/*********** Mise en page de la page CONTENU **********/
+
+
+#corps_contenu
+{
+	min-height:570px;
+}
+
+
+#corps_contenu h2
+{
+	position:relative;
+	font-family:courier;
+	display: block;
+	width:600px;
+	margin:auto;
+	top:250px;
+	text-align:center;
+	font-weight:400;
+	font-size:24px;
+	color:rgba(180,180,180,0.6);
+	text-shadow: 1px 2px 2px #def, 0 0 0 #000, 1px 2px 2px #def;
+}
+
+
+#corps_contenu h3
+{
+	position:relative;
+	font-family:courier;
+	display: block;
+	width:600px;
+	margin:auto;
+	top:250px;
+	text-align:right;
+	font-weight:400;
+	font-size:20px;
+	color:rgba(180,180,180,0.6);
+	text-shadow: 1px 2px 2px #def, 0 0 0 #000, 1px 2px 2px #def;
+}
+
+
+
+
+
+/*********** Mise en page de la page LOGIN **********/
+
+
+#corps_login
+{
+	min-height:470px;
+}
+
+
+#corps_login h1
+{
+	position:relative;
+	font-family:courier;
+	display: block;
+	margin-top:100px;
+	text-align:center;
+	font-weight:400;
+	font-size:50px;
+	color:rgba(180,180,180,0.6);
+	text-shadow: 1px 4px 6px #def, 0 0 0 #000, 1px 4px 6px #def;
+}
+
+
+
+#corps_login table
+{
+	text-align:center;
+	display:block;
+	width:400px;
+	margin:auto;
+}
+
+
+#corps_login table td
+{
+	width:200px;
+	height:25px;
+	text-align:center;
+}
+
+.gros_bouton
+{
+	width:160px;
+	height:35px;
+	text-align:center;
+	padding-top:10px;
+	background:rgba(200,14,31,.5);
+	border-radius:5px;
+	color:white;
+	margin:auto;
+	cursor:pointer;
+}
+
+
+#connexion, #creer_compte
+{
+	margin-top:20px;
+	padding-top:20px;
+	padding-bottom:20px;
+	border:2px outset rgba(200,14,31,.3);
+	border-radius:5px;
+}
+
+
+#creer_compte
+{
+	padding-bottom:20px;
+	border:2px outset rgba(200,14,31,.3);
+	border-radius:5px;
+}
+
+
+
+
+
+/*********** Mise en page de la page USER ACCOUNT **********/
+
+#corps_user_account
+{
+	min-height:470px;
+}
+
+
+#corps_user_account h1
+{
+	position:relative;
+	font-family:courier;
+	display: block;
+	margin-top:100px;
+	text-align:center;
+	font-weight:400;
+	font-size:50px;
+	color:rgba(180,180,180,0.6);
+	text-shadow: 1px 4px 6px #def, 0 0 0 #000, 1px 4px 6px #def;
+}
+
+
+#menu_user_account
+{
+	text-align:center;
+	display:block;
+	width:400px;
+	margin:auto;
+}	
+
+
+#menu_user_account td
+{
+	width:200px;
+}	
+
+
+
+#table_favoris
+{
+	position:relative;
+	margin:auto;
+	display:block;
+	width:800px;
+	text-align:center;
+	margin-top:50px;
+	margin-bottom:50px;
+	border-collapse:collapse;
+}
+
+
+#table_favoris td
+{
+	width:100px;
+	height:25px;
+}
+
+
+#gestion_thread
+{
+	width:1000px;
+	margin:auto;
+	display:block;
+}
+
+
+#gestion_thread_gauche
+{
+	width:500px;
+	display:inline-block;
+	text-align:center;
+}
+
+
+#gestion_thread_droit
+{
+	width:450px;
+	vertical-align:top;
+	display:inline-block;
+}
+
+
+#next_up 
+{
+	text-align:center;
+	height:100px;
+}
+
+
+#next_up 
+{
+	text-align:center;
+}
+
+
+#pending_items table
+{
+	display:inline-block;
+	width:400px;
+	margin-left:25px;
+	text-align:center;
+	border-collapse:collapse;
+}
+	
+

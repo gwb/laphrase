@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+	<html>
+		<head>
+			<meta charset='UTF-8'/>
+			<title>Categorie - Politique</title>
+			<link rel='Stylesheet' href='../static/stylesheet.css'/>
+		</head>
+		
+		<body>
+			
+			<header>
+				<div id='menu_top'>
+					<span id='titre'>Once a Day</span>
+					<table id='login'>
+						<tr>
+							<td>Rodolphe Basse</td>
+							<td>Logout</td>
+						</tr>
+					</table>
+				</div>
+			</header>
+			
+			<div id='corps_user_account'>
+				<h1>Mon compte</h1>
+				
+				<div id='menu_user_account'>
+					<table>
+						<tr>
+							<td><div class='gros_bouton' id='bouton_favoris_user'>Mes Favoris</div></td>
+							<td><div class='gros_bouton' id='bouton_thread_user'>Mon Thread</div></td>
+						</tr>
+					</table>
+				</div>
+				
+				<div id='favoris_user'>
+					<table id='table_favoris'>
+						<tr class='ligne_titre'>
+							<th>Last</th>
+							<th>Next</th>
+							<th>Auteur</th>
+							<th width='400px'>Thread</th>
+							<th>Abonnés</th>
+						</tr>
+						<tr class='ligne_impaire'>
+							<td>hier</td>
+							<td>5 min</td>
+							<td>Enkidou</td>
+							<td>Les Chroniques de la Téranga</td>
+							<td>200</td>
+						</tr>
+						<tr>
+							<td>hier</td>
+							<td>10 min</td>
+							<td>GIMB</td>
+							<td>Les statistiques en une phrase</td>
+							<td>700</td>
+						</tr>
+					</table>
+				</div>
+				
+				<div id='gestion_thread'>
+					<div id='gestion_thread_gauche'>
+						<h3>Nouvelle Punch Line</h3>
+						<p>Vous venez de trouver une grosse punch line ?</br>
+						Enregistrez là maintenant, gérez la plus tard...</p>
+						<br/>
+						<form>
+							<textarea name='content' cols='50' rows='4'></textarea>
+							</br>
+							<input type='submit' value='Enregistrer'/>
+						</form>
+					</div>
+					<div id='gestion_thread_droit'>
+						<div id='next_up'>
+							<h3>Next Up</h3>
+							<p>Next punch line on the go</p>
+						</div>
+						<div id='pending_items'>
+							<table>
+								<tr class='ligne_titre'>
+									<th width='300px'>Punch Line</th>
+									<th width='100px'>Line Up</th>
+								</tr>
+								<tr>
+									<td>Blabalbala</td>
+									<td><input type='checkbox' name=''/></td>
+								</tr>
+								<tr class='ligne_impaire'>
+									<td>Fuckin with B.IG it ain't safe!</td>
+									<td><input type='checkbox' name=''/></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+			<footer>
+				<div id='bottom_bar'>
+					<p>Powered by : Gangsta-Business Inc.</p>
+				</div>
+			</footer>
+			
+			<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+			<script src="../static/mon_jquery.js"></script>
+			
+			
+		</body>
+	</html>
