@@ -42,6 +42,7 @@ def login():
             session['user_first_name'] = login_infos['first_name']
             session['user_last_name'] = login_infos['last_name']
             session['user_id'] = login_infos['id']
+            session['logged_in'] = True
             return "login successful"
         else:
             return "login failed"
@@ -64,9 +65,40 @@ def create_account():
         return render_template("form_create_account.html")
     return "create account page"
 
+@app.route('/add-content', methods=['GET', 'POST'])
+def add_content():
+    if request.method == 'GET':
+        if session["logged_in"]:
+            entries = accutils.get_content_by_userid(g.con,
+                                                     session["user_id"])
+            return render_template("add_content.html",
+                                   entries=entries)
+    else:
+        if session['logged_in']:
+            entries = accutils.get_content_by_userid(g.con,
+                                                     session["user_id"])
+            accutils.add_phrase(g.con,
+                                request.form['content'],
+                                session['user_id'])
+        #return redirect(url_for('dump_tables'))
+        return redirect(url_for('add_content'))
+
+            
+
+@app.route('/logout')
+def logout():
+    session.pop('user_first_name', None)
+    session.pop('user_last_name', None)
+    session.pop('user_id', None)
+    session.pop('logged_in', None)
+    app.logger.debug('WARNING - You were logged out')
+    return redirect(url_for('index'))
+                           
+
 @app.route('/dump-tables')
 def dump_tables():
-    return jsonify([map(str, subls) for subls in dbutils.dump_users(g.con)])
+    #users = jsonify([map(str, subls) for subls in dbutils.dump_users(g.con)])
+    return jsonify([map(str, subls) for subls in dbutils.dump_phrases(g.con)])
     #return jsonify(map(str,dbutils.dump_users(g.con)))
 
 @app.route('/check-session')
@@ -75,7 +107,13 @@ def dump_session():
                     "user_last_name": session["user_last_name"],
                     "user_id": session["user_id"]})
 
-
+@app.route('/check-login')
+def dump_login():
+    if "logged_in" in session:
+        return "Logged in as %s %s" % (session["user_first_name"],
+                                       session["user_last_name"])
+    else:
+        return "Not logged in"
 
 
 if __name__ == '__main__':
