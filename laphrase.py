@@ -44,7 +44,7 @@ def login():
             session['user_last_name'] = login_infos['last_name']
             session['user_id'] = login_infos['id']
             session['logged_in'] = True
-            return "login successful"
+            return redirect(url_for('index'))
         else:
             return "login failed"
     else:
@@ -95,6 +95,10 @@ def add_content():
         return redirect(url_for('add_content'))
 
             
+
+@app.route('/my-account')
+def my_account():
+    return render_template('user_account.html')
 
 @app.route('/logout')
 def logout():

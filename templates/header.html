@@ -1,0 +1,15 @@
+<header>
+  <div id='menu_top'>
+    <span id='titre'>Once a Day</span>
+    <table id='login'>
+      <tr>
+        {% if session.logged_in %}
+        <td>{{session.user_first_name}} {{session.user_last_name}} | </td>
+        <td><a href="{{url_for('logout')}}"> Logout </a></td>
+        {% else %}
+        <td><a href="{{url_for('login')}}"> Login </a></td>
+        {% endif %}
+      </tr>
+    </table>
+  </div>
+</header>
