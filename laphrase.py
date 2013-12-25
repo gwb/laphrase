@@ -51,7 +51,6 @@ def login():
         return render_template("login.html")
         #return render_template("form_login.html")
 
-    
 
 @app.route('/create-account', methods=['GET', 'POST'])
 def create_account():
