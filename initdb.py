@@ -35,6 +35,7 @@ def _init_db(con):
                 "date_created TIMESTAMP, "
                 "first_name VARCHAR(50), "
                 "last_name VARCHAR(50), "
+                "email VARCHAR(50), "
                 "username VARCHAR(50), "
                 "password VARCHAR(250), "
                 "publication_time TIME)"
