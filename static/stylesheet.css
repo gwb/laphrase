@@ -389,7 +389,7 @@ th
 {
 	text-align:center;
 	display:block;
-	width:400px;
+	width:600px;
 	margin:auto;
 }	
 
@@ -426,6 +426,13 @@ th
 	width:1000px;
 	margin:auto;
 	display:block;
+	margin-top:30px;
+}
+
+
+#gestion_thread h3
+{
+	font-family:courier;
 }
 
 
@@ -448,7 +455,7 @@ th
 #next_up 
 {
 	text-align:center;
-	height:100px;
+	height:110px;
 }
 
 
@@ -467,4 +474,13 @@ th
 	border-collapse:collapse;
 }
 	
+
+#settings
+{
+	padding-top:30px;
+	display:block;
+	width:500px;
+	margin:auto;
+	text-align:center;
+}
 
