@@ -45,6 +45,17 @@ body
 }
 
 
+.bouton_allume
+{
+	background:rgba(200,14,31,1);
+}
+
+.bouton_eteint
+{
+	background:rgba(200,14,31,.5);
+}
+
+
 /********** Mise en place du design du Menu ***********/
 
 #menu_top
