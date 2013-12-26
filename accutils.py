@@ -22,13 +22,17 @@ def add_phrase(con, content, users_id):
 
 def user_adaptator(user):
     return {"id": user[0],
-            "date_created": user[1],
+            "date_created": str(user[1]),
             "first_name": user[2],
             "last_name": user[3],
             "email": user[4],
             "username": user[5],
             "password": user[6],
             "publication_time": user[7]}
+
+def get_user_by_id(con, id):
+    user = user_adaptator(dbutils.get_user_by_id(con, id))
+    return user
 
 def get_content_by_userid(con, users_id):
     content_list = dbutils.get_content_by_userid(con, users_id)

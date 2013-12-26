@@ -1,192 +1,194 @@
 <!DOCTYPE html>
-	<html>
-		<head>
-			<meta charset='UTF-8'/>
-			<title>Mon compte</title>
-			<link rel='Stylesheet' href='../static/stylesheet.css'/>
-			<link rel='Stylesheet' href='../static/style.css'/>
-			<script src="../static/jquery.js"></script>
-			<script src="../static/mon_jquery.js"></script>
-			<script src="../static/jquery.tablesorter.min.js"></script>
-			<script>
-				$(document).ready(function() 
-					{ 
-						$("#table_favoris").tablesorter(); 
-					} 
-				); 
-			</script>
-		</head>
-		
-		<body>
-			
-                  {% include 'header.html' %}
-			
-			<div id='corps_user_account'>
-				<h1>Mon compte</h1>
-				
-				<div id='menu_user_account'>
-					<table>
-						<tr>
-							<td><div class='gros_bouton' id='bouton_favoris_user' style='background:rgba(200,14,31,1)'>Mes Favoris</div></td>
-							<td><div class='gros_bouton' id='bouton_thread_user'>Mon Thread</div></td>
-							<td><div class='gros_bouton' id='bouton_settings'>Settings</div></td>
-						</tr>
-					</table>
-				</div>
-				
-				<div id='favoris_user'>
-					<table id='table_favoris' class='tablesorter'>
-						<thead>
-						<tr class='ligne_titre'>
-							<th>Last</th>
-							<th>Next</th>
-							<th>Auteur</th>
-							<th width='400px'>Thread</th>
-							<th>Abonnés</th>
-						</tr>
-						</thead>
-						<tbody>
-						<tr class='ligne_impaire'>
-							<td>hier</td>
-							<td>5 min</td>
-							<td>Enkidou</td>
-							<td>Les Chroniques de la Téranga</td>
-							<td>200</td>
-						</tr>
-						<tr>
-							<td>hier</td>
-							<td>10 min</td>
-							<td>GIMB</td>
-							<td>Les statistiques en une phrase</td>
-							<td>700</td>
-						</tr>
-						</tbody>
-					</table>
-				</div>
-				
-				<div id='gestion_thread' style='display:none'>
-					<div id='gestion_thread_gauche'>
-						<h3>Nouvelle Punch Line</h3>
-						<p>Vous venez de trouver une grosse punch line ?</br>
-						Enregistrez là maintenant, gérez la plus tard...</p>
-						<br/>
-						<form>
-							<textarea name='content' cols='50' rows='4'></textarea>
+<html>
+  <head>
+    <meta charset='UTF-8'/>
+    <title>Mon compte</title>
+    <link rel='Stylesheet' href='../static/stylesheet.css'/>
+    <link rel='Stylesheet' href='../static/style.css'/>
+    <script src="../static/jquery.js"></script>
+    <script src="../static/mon_jquery.js"></script>
+    <script src="../static/jquery.tablesorter.min.js"></script>
+    <script>
+      $(document).ready(function() 
+      { 
+      $("#table_favoris").tablesorter(); 
+      } 
+      ); 
+    </script>
+  </head>
+  
+  <body>
+    
+    {% include 'header.html' %}
+    
+    <div id='corps_user_account'>
+      <h1>Mon compte</h1>
+      
+      <div id='menu_user_account'>
+	<table>
+	  <tr>
+	    <td><div class='gros_bouton' id='bouton_favoris_user' style='background:rgba(200,14,31,1)'>Mes Favoris</div></td>
+	    <td><div class='gros_bouton' id='bouton_thread_user'>Mon Thread</div></td>
+	    <td><div class='gros_bouton' id='bouton_settings'>Settings</div></td>
+	  </tr>
+	</table>
+      </div>
+      
+      <div id='favoris_user' style="{{display.favorites}}">
+	<table id='table_favoris' class='tablesorter'>
+	  <thead>
+	    <tr class='ligne_titre'>
+	      <th>Last</th>
+	      <th>Next</th>
+	      <th>Auteur</th>
+	      <th width='400px'>Thread</th>
+	      <th>Abonnés</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    <tr class='ligne_impaire'>
+	      <td>hier</td>
+	      <td>5 min</td>
+	      <td>Enkidou</td>
+	      <td>Les Chroniques de la Téranga</td>
+	      <td>200</td>
+	    </tr>
+	    <tr>
+	      <td>hier</td>
+	      <td>10 min</td>
+	      <td>GIMB</td>
+	      <td>Les statistiques en une phrase</td>
+	      <td>700</td>
+	    </tr>
+	  </tbody>
+	</table>
+      </div>
+      
+      <div id='gestion_thread' style="{{display.thread}}">
+	<div id='gestion_thread_gauche'>
+	  <h3>Nouvelle Punch Line</h3>
+	  <p>Vous venez de trouver une grosse punch line ?</br>
+	    Enregistrez là maintenant, gérez la plus tard...</p>
+	  <br/>
+	  <form action="{{ url_for('add_content') }}" method=post>
+	    <textarea name='content' cols='50' rows='4'></textarea>
 							</br>
 							<input type='submit' value='Enregistrer'/>
-						</form>
-					</div>
-					<div id='gestion_thread_droit'>
-						<div id='next_up'>
-							<h3>Next Up</h3>
-							<p>Next punch line on the go</p>
-						</div>
-						<div id='pending_items'>
-							<table>
-								<tr class='ligne_titre'>
-									<th width='300px'>Punch Line</th>
-									<th width='100px'>Line Up</th>
-								</tr>
-								<tr>
-									<td>Blabalbala</td>
-									<td><input type='checkbox' name=''/></td>
-								</tr>
-								<tr class='ligne_impaire'>
-									<td>Fuckin with B.IG it ain't safe!</td>
-									<td><input type='checkbox' name=''/></td>
-								</tr>
-							</table>
-						</div>
-					</div>
-				</div>
-				
-				<div id='settings' style='display:none'>
-					<form>
-						<table>
-							<tr>
-								<td>Prénom : </td>
-								<td><input type='text' name='firt_name'/></td>
-							</tr>
-							<tr>
-								<td>Nom : </td>
-								<td><input type='text' name='last_name'/></td>
-							</tr>
-							<tr>
-								<td>Pseudo : </td>
-								<td><input type='text' name='user_name'/></td>
-							</tr>
-							<tr>
-								<td>Nom du thread : </td>
-								<td><input type='text' name='thread_name'/></td>
-							</tr>
-							<tr>
-								<td>Description du thread : </td>
-								<td><textarea cols='40' rows='4' name='thread_description'></textarea></td>
-							</tr>
-							<tr>
-								<td>Heure de publication : </td>
-								<td>
-									<select name='hour'>
-										<option>00</option>
-										<option>01</option>
-										<option>02</option>
-										<option>03</option>
-										<option>04</option>
-										<option>05</option>
-										<option>06</option>
-										<option>07</option>
-										<option>08</option>
-										<option>09</option>
-										<option>10</option>
-										<option>11</option>
-										<option>12</option>
-										<option>13</option>
-										<option>14</option>
-										<option>15</option>
-										<option>16</option>
-										<option>17</option>
-										<option>18</option>
-										<option>19</option>
-										<option>20</option>
-										<option>21</option>
-										<option>22</option>
-										<option>23</option>
-									</select>
-									h
-									<select name='minutes'>
-										<option>00</option>
-										<option>05</option>
-										<option>10</option>
-										<option>15</option>
-										<option>20</option>
-										<option>25</option>
-										<option>30</option>
-										<option>35</option>
-										<option>40</option>
-										<option>45</option>
-										<option>50</option>
-										<option>55</option>
-									</select>
-									m
-								</td>
-							</tr>
-							<tr><td colspan='2' class='separation'></td></tr>
-							<tr>
-								<td colspan='2'><input type='submit' value='Valider'/></td>
-							</tr>	
-						</table>
-					</form>
-				</div>
-			</div>
-			
-			
-			<footer>
-				<div id='bottom_bar'>
-					<p>Powered by : Gangsta-Business Inc.</p>
-				</div>
-			</footer>
-			
-			
-			
-		</body>
-	</html>
+	  </form>
+	</div>
+	<div id='gestion_thread_droit'>
+	  <div id='next_up'>
+	    <h3>Next Up</h3>
+            {% if nextup is none %}
+            No next up
+            {% else %}
+            {{nextup.content}}
+            {% endif %}
+	  </div>
+	  <div id='pending_items'>
+	    <table>
+	      <tr class='ligne_titre'>
+		<th width='300px'>Punch Line</th>
+		<th width='100px'>Line Up</th>
+	      </tr>
+              {% for entry in entries %}
+              <tr> 
+                <td> {{entry.content}} </td>
+                <td> <input type=checkbox id={{entry.id}}> </td>
+              </tr>
+              {% else %}
+              <tr> No entries </tr>
+              {% endfor %}
+
+	    </table>
+	  </div>
+	</div>
+      </div>
+      
+      <div id='settings' style='display:none'>
+	<form>
+	  <table>
+	    <tr>
+	      <td>Prénom : </td>
+	      <td><input type='text' name='first_name' value="{{user.first_name}}"/></td>
+	    </tr>
+	    <tr>
+	      <td>Nom : </td>
+	      <td><input type='text' name='last_name' value="{{user.last_name}}"/></td>
+	    </tr>
+	    <tr>
+	      <td>Pseudo : </td>
+	      <td><input type='text' name='user_name' value="{{user.username}}"/></td>
+	    </tr>
+	    <tr>
+	      <td>Nom du thread : </td>
+	      <td><input type='text' name='thread_name'/></td>
+	    </tr>
+	    <tr>
+	      <td>Description du thread : </td>
+	      <td><textarea cols='40' rows='4' name='thread_description'></textarea></td>
+	    </tr>
+	    <tr>
+	      <td>Heure de publication : </td>
+	      <td>
+		<select name='hour'>
+		  <option>00</option>
+		  <option>01</option>
+		  <option>02</option>
+		  <option>03</option>
+		  <option>04</option>
+		  <option>05</option>
+		  <option>06</option>
+		  <option>07</option>
+		  <option>08</option>
+		  <option>09</option>
+		  <option>10</option>
+		  <option>11</option>
+		  <option>12</option>
+		  <option>13</option>
+		  <option>14</option>
+		  <option>15</option>
+		  <option>16</option>
+		  <option>17</option>
+		  <option>18</option>
+		  <option>19</option>
+		  <option>20</option>
+		  <option>21</option>
+		  <option>22</option>
+		  <option>23</option>
+		</select>
+		h
+		<select name='minutes'>
+		  <option>00</option>
+		  <option>05</option>
+		  <option>10</option>
+		  <option>15</option>
+		  <option>20</option>
+		  <option>25</option>
+		  <option>30</option>
+		  <option>35</option>
+		  <option>40</option>
+		  <option>45</option>
+		  <option>50</option>
+		  <option>55</option>
+		</select>
+		m
+	      </td>
+	    </tr>
+	    <tr><td colspan='2' class='separation'></td></tr>
+	    <tr>
+	      <td colspan='2'><input type='submit' value='Valider'/></td>
+	    </tr>	
+	  </table>
+	</form>
+      </div>
+    </div>
+    
+    
+    <footer>
+      <div id='bottom_bar'>
+	<p>Powered by : Gangsta-Business Inc.</p>
+      </div>
+    </footer>    
+  </body>
+</html>
