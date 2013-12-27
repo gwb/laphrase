@@ -268,11 +268,10 @@ th
 {
 	position:relative;
 	font-family:courier;
-	display: block;
-	width:600px;
+	display: inline-block;
 	margin:auto;
 	top:250px;
-	text-align:center;
+	text-align:left;
 	font-weight:400;
 	font-size:24px;
 	color:rgba(180,180,180,0.6);
