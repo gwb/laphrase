@@ -21,20 +21,20 @@
     
     {% include 'header.html' %}
     
-    <div id='corps_user_account'>
-      <h1>Mon compte</h1>
+  <div id='corps_user_account'>
+    <h1>Mon compte</h1>
       
-      <div id='menu_user_account'>
+  <div id='menu_user_account'>
 	<table>
 	  <tr>
-	    <td><div class='gros_bouton' id='bouton_favoris_user' style='background:rgba(200,14,31,1)'>Mes Favoris</div></td>
+		<td><div class='gros_bouton' id='bouton_favoris_user' style='background:rgba(200,14,31,1)'>Mes Favoris</div></td>
 	    <td><div class='gros_bouton' id='bouton_thread_user'>Mon Thread</div></td>
 	    <td><div class='gros_bouton' id='bouton_settings'>Settings</div></td>
 	  </tr>
 	</table>
-      </div>
+  </div>
       
-      <div id='favoris_user' style="{{display.favorites}}">
+  <div id='favoris_user' style="{{display.favorites}}">
 	<table id='table_favoris' class='tablesorter'>
 	  <thead>
 	    <tr class='ligne_titre'>
@@ -62,9 +62,9 @@
 	    </tr>
 	  </tbody>
 	</table>
-      </div>
+  </div>
       
-      <div id='gestion_thread' style="{{display.thread}}">
+  <div id='gestion_thread' style="{{display.thread}}">
 	<div id='gestion_thread_gauche'>
 	  <h3>Nouvelle Punch Line</h3>
 	  <p>Vous venez de trouver une grosse punch line ?</br>
@@ -72,8 +72,8 @@
 	  <br/>
 	  <form action="{{ url_for('add_content') }}" method=post>
 	    <textarea name='content' cols='50' rows='4'></textarea>
-							</br>
-							<input type='submit' value='Enregistrer'/>
+				</br>
+				<input type='submit' value='Enregistrer'/>
 	  </form>
 	</div>
 	<div id='gestion_thread_droit'>
@@ -89,12 +89,15 @@
 	    <table>
 	      <tr class='ligne_titre'>
 		<th width='300px'>Punch Line</th>
-		<th width='100px'>Line Up</th>
+		<th width='150px'>Actions</th>
 	      </tr>
               {% for entry in entries %}
               <tr> 
                 <td> {{entry.content}} </td>
-                <td> <input type=checkbox id={{entry.id}}> </td>
+                <td>
+                	<a href='#' class='petit_bouton'>Next Up</a>
+                	<a href='#' class='petit_bouton'>Delete</a>
+                </td>
               </tr>
               {% else %}
               <tr> No entries </tr>

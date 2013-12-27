@@ -352,6 +352,23 @@ th
 }
 
 
+.petit_bouton
+{
+	width:100px;
+	height:25px;
+	padding:0px 5px 0px 5px;
+	text-align:center;
+	background:rgba(200,14,31,1);
+	border-radius:2px;
+	font-size:12px;
+	color:white;
+	margin:auto;
+	cursor:pointer;
+	text-decoration:none;
+}
+	
+
+
 #connexion, #creer_compte
 {
 	margin-top:20px;
@@ -469,17 +486,13 @@ th
 }
 
 
-#next_up 
-{
-	text-align:center;
-}
 
 
 #pending_items table
 {
 	display:inline-block;
-	width:400px;
-	margin-left:25px;
+	width:450px;
+	margin-left:0px;
 	text-align:center;
 	border-collapse:collapse;
 }
