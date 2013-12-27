@@ -54,6 +54,11 @@ def get_user_by_email(con, email):
     cur.execute("SELECT * FROM users WHERE email=%s", (email,))
     return cur.fetchone()
 
+def get_user_by_id(con, id):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM users WHERE id=%s", (id,))
+    return cur.fetchone()
+
 def add_content(con, content):
     cur = con.cursor()
     cur.execute("INSERT INTO phrases ("

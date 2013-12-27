@@ -31,74 +31,85 @@ def teardown_request(exception):
 def index():
     return render_template("accueil.html")
 
-
-@app.route('/login', methods=['GET','POST'])
+@app.route('/login')
 def login():
-    if request.method == 'POST':
-        #import pdb; pdb.set_trace()
-        email=request.form['email']
-        password=request.form['password']
-        login_infos = accutils.check_login(g.con, email, password)
-        if login_infos:
-            session['user_first_name'] = login_infos['first_name']
-            session['user_last_name'] = login_infos['last_name']
-            session['user_id'] = login_infos['id']
-            session['logged_in'] = True
-            return redirect(url_for('index'))
-        else:
-            return "login failed"
+    return render_template('login.html')
+
+@app.route('/process-login', methods=['POST'])
+def process_login():
+    email=request.form['email']
+    password=request.form['password']
+    login_infos = accutils.check_login(g.con, email, password)
+    if login_infos:
+        session['user_first_name'] = login_infos['first_name']
+        session['user_last_name'] = login_infos['last_name']
+        session['user_id'] = login_infos['id']
+        session['logged_in'] = True
+        return redirect(url_for('my_account'))
     else:
-        return render_template("login.html")
-        #return render_template("form_login.html")
+        return "login failed"
 
-    
 
-@app.route('/create-account', methods=['GET', 'POST'])
-def create_account():
-    if request.method == 'POST':
-        try:
-            accutils.create_account(g.con,
-                                    request.form['first_name'],
-                                    request.form['last_name'],
-                                    request.form['email'],
-                                    request.form['password'])
-        except IOError:
-            app.logger.debug("ERROR - couldn't add account")                    
-    else:
-        return render_template("login.html")
-        #return render_template("form_create_account.html")
-    return render_template("login.html")
+@app.route('/process-create-account', methods=['GET', 'POST'])
+def process_create_account():
+    try:
+        accutils.create_account(g.con,
+                                request.form['first_name'],
+                                request.form['last_name'],
+                                request.form['email'],
+                                request.form['password'])
+    except IOError:
+        app.logger.debug("ERROR - couldn't add account")
+        return "Couldn't create account"
+    return redirect(url_for('my_account'))
 
-@app.route('/add-content', methods=['GET', 'POST'])
+@app.route('/add-content', methods=['POST'])
 def add_content():
-    if request.method == 'GET':
-        if session["logged_in"]:
-            entries = accutils.get_content_by_userid(g.con,
-                                                     session["user_id"])
-            nextup = [entry for entry in entries if entry['next_up']]
-            if len(nextup) > 0:
-                nextup = nextup[0]
-            else:
-                nextup = None
-                
-            return render_template("add_content.html",
-                                   entries=entries,
-                                   nextup=nextup)
-    else:
-        if session['logged_in']:
-            entries = accutils.get_content_by_userid(g.con,
-                                                     session["user_id"])
-            accutils.add_phrase(g.con,
-                                request.form['content'],
-                                session['user_id'])
-        #return redirect(url_for('dump_tables'))
-        return redirect(url_for('add_content'))
+    if session['logged_in']:
+        accutils.add_phrase(g.con,
+                            request.form['content'],
+                            session['user_id'])
+        return redirect(url_for('my_account', display="thread"))
 
             
 
 @app.route('/my-account')
 def my_account():
-    return render_template('user_account.html')
+    if not "logged_in" in session:
+        return redirect(url_for('login'))
+    else:
+        entries = accutils.get_content_by_userid(g.con,
+                                                 session["user_id"])
+        nextup = [entry for entry in entries if entry['next_up']]
+        if len(nextup) > 0:
+            nextup = nextup[0]
+        else:
+            nextup = None
+
+        display = {"thread": 'display:none',
+                   "favorites": ''}
+
+        if 'display' in request.args:
+            if request.args['display'] == 'favorites':
+                display = {"thread": 'display:none',
+                           "favorites": ''}
+            else:
+                display = {"thread": '',
+                           "favorites": 'display:none',}
+
+        user = accutils.get_user_by_id(g.con, session["user_id"])
+ 
+        return render_template('user_account.html',
+                               entries=entries,
+                               nextup=nextup,
+                               display=display,
+                               user=user)
+
+
+@app.route('/contenu')
+def contenu():
+    return render_template('contenu.html')
+
 
 @app.route('/logout')
 def logout():
