@@ -66,10 +66,13 @@ def process_create_account():
 @app.route('/add-content', methods=['POST'])
 def add_content():
     if session['logged_in']:
-        accutils.add_phrase(g.con,
-                            request.form['content'],
-                            session['user_id'])
-        return redirect(url_for('my_account', display="thread"))
+        if not accutils.check_exists_thread(g.con, session['user_id']):
+            return redirect(url_for('my_account'))
+        else:
+            accutils.add_phrase(g.con,
+                                request.form['content'],
+                                session['user_id'])
+            return redirect(url_for('my_account', display="thread"))
 
             
 
@@ -98,18 +101,64 @@ def my_account():
                            "favorites": 'display:none',}
 
         user = accutils.get_user_by_id(g.con, session["user_id"])
- 
+
+        thread = accutils.get_thread_by_userid(g.con, session["user_id"])
+
+        category = accutils.get_category_by_userid(g.con, session["user_id"])
+
+        if category:
+            category = category["name"]
+
+        if user["publication_time"] is not None:
+            user["hour"], user["minutes"] = user["publication_time"].split(":")[:2]
+        
         return render_template('user_account.html',
                                entries=entries,
                                nextup=nextup,
                                display=display,
-                               user=user)
+                               user=user,
+                               thread=thread,
+                               category=category)
 
 
 @app.route('/contenu')
 def contenu():
     return render_template('contenu.html')
 
+
+@app.route('/settings', methods=['POST'])
+def settings():
+    if not "logged_in" in session:
+        return redirect(url_for('login'))
+    else:
+        publication_time = "%s:%s"%(request.form["hour"],
+                                    request.form["minutes"])
+        accutils.update_settings(g.con,
+                                 session['user_id'],
+                                 request.form["first_name"],
+                                 request.form["last_name"],
+                                 request.form["user_name"],
+                                 request.form["thread_name"],
+                                 request.form["thread_category"],
+                                 request.form["thread_description"],
+                                 publication_time)
+        return redirect(url_for('my_account'))
+
+
+@app.route('/add-category', methods=['GET','POST'])
+def add_category():
+    if request.method == 'GET':
+        categories = accutils.get_all_categories(g.con)
+        return render_template("add_category.html",
+                               categories=categories)
+    else:
+        accutils.add_category(g.con, request.form['name'])
+        return redirect(url_for("add_category"))
+                              
+
+@app.route('/category')
+def category():
+    return render_template("categorie.html")
 
 @app.route('/logout')
 def logout():

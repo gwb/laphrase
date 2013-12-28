@@ -106,7 +106,7 @@
       </div>
       
       <div id='settings' style='display:none'>
-	<form>
+	<form action="{{ url_for('settings') }}" method=post>
 	  <table>
 	    <tr>
 	      <td>Prénom : </td>
@@ -122,16 +122,23 @@
 	    </tr>
 	    <tr>
 	      <td>Nom du thread : </td>
-	      <td><input type='text' name='thread_name'/></td>
+	      <td><input type='text' name='thread_name' value="{{thread.name}}"/></td>
+	    </tr>
+            <tr>
+	      <td>Categorie du thread : </td>
+	      <td><input type='text' name='thread_category' value="{{category}}"/></td>
 	    </tr>
 	    <tr>
 	      <td>Description du thread : </td>
-	      <td><textarea cols='40' rows='4' name='thread_description'></textarea></td>
+	      <td><textarea cols='40' rows='4' name='thread_description'>{{thread.description}}</textarea></td>
 	    </tr>
 	    <tr>
 	      <td>Heure de publication : </td>
 	      <td>
 		<select name='hour'>
+                  {% if user.hour %}
+                  <option>{{user.hour}}</option>
+                  {% endif %}
 		  <option>00</option>
 		  <option>01</option>
 		  <option>02</option>
@@ -159,6 +166,9 @@
 		</select>
 		h
 		<select name='minutes'>
+                  {% if user.minutes %}
+                  <option>{{user.minutes}}</option>
+                  {% endif %}
 		  <option>00</option>
 		  <option>05</option>
 		  <option>10</option>

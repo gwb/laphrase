@@ -1,5 +1,8 @@
 import dbutils
 
+class DBLogicError(Exception):
+    pass
+
 def create_account(con, first_name, last_name, email, password):
     # validate informations
     # TODO
@@ -17,7 +20,9 @@ def check_login(con, email, password):
 
 def add_phrase(con, content, users_id):
     phrases_id = dbutils.add_content(con, content)
-    dbutils.bind_content_user(con, phrases_id, users_id)
+    threads_id = dbutils.get_thread_by_userid(con, users_id)[0]
+    #dbutils.bind_content_user(con, phrases_id, users_id)
+    dbutils.bind_threads_phrases(con, threads_id, phrases_id)
     return None
 
 def user_adaptator(user):
@@ -28,14 +33,18 @@ def user_adaptator(user):
             "email": user[4],
             "username": user[5],
             "password": user[6],
-            "publication_time": user[7]}
+            "publication_time": str(user[7])}
 
 def get_user_by_id(con, id):
     user = user_adaptator(dbutils.get_user_by_id(con, id))
     return user
 
 def get_content_by_userid(con, users_id):
-    content_list = dbutils.get_content_by_userid(con, users_id)
+    #content_list = dbutils.get_content_by_userid(con, users_id)
+    if not check_exists_thread(con, users_id):
+        return []
+    threads_id = dbutils.get_thread_by_userid(con, users_id)[0]
+    content_list = dbutils.get_content_by_threadid(con, threads_id)
     content_list = map(phrase_adaptator, content_list)
     return content_list
 
@@ -48,3 +57,76 @@ def phrase_adaptator(phrase):
             "num_views": phrase[5],
             "num_up": phrase[6],
             "num_down": phrase[7]}
+
+def thread_adaptator(thread):
+    return {"id": thread[0],
+            "date_created": str(thread[1]),
+            "name": thread[2],
+            "description": thread[3]}
+
+def category_adaptator(category):
+    return {"id": category[0],
+            "date_created": str(category[1]),
+            "name": category[2]}
+
+def check_exists_thread(con, user_id):
+    thread_id = dbutils.get_thread_by_userid(con, user_id)
+    return thread_id is not None
+
+
+def create_thread(con, user_id, thread_name, thread_description):
+    # Check if user already has a thread
+    has_thread = check_exists_thread(con, user_id)
+
+    if has_thread:
+        raise DBLogicError
+
+    else:
+        thread_id = dbutils.create_thread(con, thread_name, thread_description)
+        dbutils.bind_threads_users(con, thread_id, user_id)
+    return thread_id
+    
+
+def update_settings(con, user_id, first_name, last_name, username, thread_name, thread_category, thread_description, publication_time):
+    # update user specific informations
+    dbutils.update_user_by_id(con,
+                              user_id,
+                              first_name,
+                              last_name,
+                              username,
+                              publication_time)
+
+    if not check_exists_thread(con, user_id):
+        # create thread if doesn't exist
+        create_thread(con, user_id, thread_name, thread_description)
+    else:
+        thread_id = dbutils.get_thread_by_userid(con, user_id)[0]
+        dbutils.update_thread_by_id(con, thread_id, thread_name, thread_description)
+        # update the category
+        if thread_category.strip(" "):
+            categories_id = dbutils.get_category_by_name(con, thread_category)[0]
+            if categories_id:
+                dbutils.unbind_threads_categories(con, thread_id)
+                dbutils.bind_threads_categories(con, thread_id, categories_id)
+
+
+def get_thread_by_userid(con, user_id):
+    return thread_adaptator(dbutils.get_thread_by_userid(con, user_id))
+
+def get_all_categories(con):
+    return map(category_adaptator, dbutils.get_all_categories(con))
+
+def get_category_by_userid(con, users_id):
+    threads_id = dbutils.get_thread_by_userid(con, users_id)[0]
+    category = dbutils.get_category_by_threadid(con, threads_id)
+    if category is not None:
+        return category_adaptator(category)
+    else:
+        return ""
+
+def add_category(con, name):
+    categories = map(category_adaptator, dbutils.get_all_categories(con))
+    # check if there's already a category with that name
+    if len([cat for cat in categories if cat['name'] == name]) == 0:
+        dbutils.add_category(con, name)
+    return None
