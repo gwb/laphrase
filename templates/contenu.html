@@ -21,9 +21,9 @@
 			</header>
 			
 			<div id='corps_contenu'>
-				<h2>"Those who know.. Know!!"</h2>
+				<h2 id='contenu'>"C'est au sommet de la montagne qu'on se sent le plus seul"</h2>
 				<br/>
-				<h3>GIMB</h3>
+				<h3 id='auteur'>La Fouine</h3>
 			</div>
 			
 			
@@ -32,6 +32,67 @@
 					<p>Powered by : Gangsta-Business Inc.</p>
 				</div>
 			</footer>
+			
+			
+			<script src="../static/jquery.js"></script>
+			<script src="../static/mon_jquery.js"></script>
+			
+			<script>
+				$(document).ready(
+					function()
+					{
+						//===== Dimensionnement du div contenu =====//
+						var texte = $('#contenu').html();
+						var delay = texte.length*50+1000;
+						var auteur = $('#auteur').html();
+						var container = document.getElementById('contenu');
+						var container_auteur = document.getElementById('auteur');
+					
+						var largeur = $('#contenu').width();
+						
+						if(largeur<=800)
+						{
+							$('#contenu').css('width',largeur);
+							$('#contenu').css('display','block');
+						}
+						else
+						{
+							$('#contenu').css('width','800');
+							$('#contenu').css('display','block');
+						}
+					
+					
+					
+						//===== Mise en place de l'affichage lettre par lettre =====//
+						$('#auteur').html('');
+						$('#contenu').html('');
+						for(var i=0, l=texte.length; i<=l; i++)
+						{
+							(function(i)
+							{
+							setTimeout(
+								function() {
+									container.innerHTML += texte.charAt(i);
+						  		},i*50);
+							}(i));
+						}
+						
+						setTimeout(
+						function()
+						{
+							for(var i=0, l=auteur.length; i<=l; i++)
+							{
+								(function(i)
+								{
+								setTimeout(
+									function(){
+										container_auteur.innerHTML += auteur.charAt(i);
+									},i*50);
+								}(i));
+							}
+						},delay)
+					})
+			</script>
 			
 			
 		</body>
