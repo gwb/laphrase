@@ -95,8 +95,8 @@
               <tr> 
                 <td> {{entry.content}} </td>
                 <td>
-                	<a href='#' class='petit_bouton'>Next Up</a>
-                	<a href='#' class='petit_bouton'>Delete</a>
+                	<a href="{{url_for('nextup')}}/{{entry.id}}" class='petit_bouton'>Next Up</a>
+                	<a href="{{url_for('delete')}}/{{entry.id}}" class='petit_bouton'>Delete</a>
                 </td>
               </tr>
               {% else %}

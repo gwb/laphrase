@@ -130,3 +130,29 @@ def add_category(con, name):
     if len([cat for cat in categories if cat['name'] == name]) == 0:
         dbutils.add_category(con, name)
     return None
+
+
+def toggle_nextup(con, phrases_id):
+    phrase = dbutils.get_phrases_by_id(con, phrases_id)
+    if phrase:
+        phrase = phrase_adaptator(phrase)
+        phrases_id = phrase['id']
+        phrases_nextup = phrase['next_up']
+        dbutils.update_nextup(con, phrases_id, not phrases_nextup)
+    return None
+
+def switch_nextup(con, users_id, phrases_id):
+    threads_id = get_thread_by_userid(con, users_id)['id']
+    old_nextup = dbutils.get_current_nextup_by_threadid(con, threads_id)
+    if old_nextup:
+        old_nextup_id = old_nextup[0]
+        toggle_nextup(con, old_nextup_id)
+    toggle_nextup(con, phrases_id)
+    return None
+
+
+def delete_phrase(con, users_id, phrases_id):
+    threads_id = get_thread_by_userid(con, users_id)['id']
+    dbutils.unbind_threads_phrases(con, threads_id, phrases_id)
+    dbutils.delete_phrases_by_id(con, phrases_id)
+    return None

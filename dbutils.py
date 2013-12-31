@@ -229,3 +229,45 @@ def unbind_threads_categories(con, thread_id):
                 "WHERE threads_id = %s",
                 (thread_id,))
     return None
+
+def unbind_threads_phrases(con, threads_id, phrases_id):
+    cur = con.cursor()
+    cur.execute("DELETE FROM threads_phrases "
+                "WHERE threads_id = %s AND phrases_id = %s",
+                (threads_id, phrases_id))
+    return None
+
+def delete_phrases_by_id(con, phrases_id):
+    cur = con.cursor()
+    cur.execute("DELETE FROM phrases "
+                "WHERE id = %s",
+                (phrases_id,))
+    return None
+
+
+def get_current_nextup_by_threadid(con, threads_id):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM "
+                "phrases AS p, "
+                "threads_phrases AS tp "
+                "WHERE "
+                "tp.threads_id = %s AND "
+                "tp.phrases_id = p.id AND "
+                "p.next_up = %s",
+                (threads_id, True))
+    return cur.fetchone()
+
+def get_phrases_by_id(con, phrases_id):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM phrases WHERE id = %s", (phrases_id,))
+    return cur.fetchone()
+
+def update_nextup(con, phrases_id, nextup):
+    cur = con.cursor()
+    cur.execute("UPDATE phrases "
+                "SET "
+                "next_up=%s "
+                "WHERE id=%s",
+                (nextup, phrases_id))
+    return None
+    

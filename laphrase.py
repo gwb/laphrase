@@ -160,6 +160,17 @@ def add_category():
 def category():
     return render_template("categorie.html")
 
+@app.route('/nextup')
+def nextup():
+    return(redirect(url_for('my_account')))
+
+@app.route('/nextup/<int:phrases_id>')
+def switch_nextup(phrases_id):
+    # TODO: check that user is the right one
+    app.logger.debug('WARNING - phrases_id = %s' % phrases_id)
+    accutils.switch_nextup(g.con, session['user_id'], phrases_id)
+    return redirect(url_for('my_account'))
+
 @app.route('/logout')
 def logout():
     session.pop('user_first_name', None)
@@ -169,6 +180,16 @@ def logout():
     app.logger.debug('WARNING - You were logged out')
     return redirect(url_for('index'))
                            
+
+@app.route('/delete')
+def delete():
+    return redirect(url_for('my_accout'))
+
+@app.route('/delete/<int:phrases_id>')
+def delete_phrase(phrases_id):
+    # TODO check that user is the right one
+    accutils.delete_phrase(g.con, session['user_id'], phrases_id)
+    return redirect(url_for('my_account'))
 
 @app.route('/dump-tables')
 def dump_tables():
