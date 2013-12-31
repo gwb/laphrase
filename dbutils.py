@@ -167,6 +167,17 @@ def get_thread_by_userid(con, users_id):
                 (users_id,))
     return cur.fetchone()
 
+def get_user_by_threadid(con, threads_id):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM "
+                "users AS u, "
+                "threads_users AS tu "
+                "WHERE "
+                "tu.threads_id = %s AND "
+                "tu.users_id = u.id ",
+                (threads_id,))
+    return cur.fetchone()
+
 def get_category_by_threadid(con, threads_id):
     cur = con.cursor()
     cur.execute("SELECT * FROM "

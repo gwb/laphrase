@@ -123,8 +123,25 @@ def my_account():
 
 @app.route('/contenu')
 def contenu():
-    return render_template('contenu.html')
+    if not "logged_in" in session:
+        return redirect(url_for('login'))
+    return redirect(url_for('index')) #render_template('contenu.html')
 
+@app.route('/contenu/<int:thread_id>')
+def contenu_thread(thread_id):
+    if not "logged_in" in session:
+        return redirect(url_for('login'))
+    try:
+        user = accutils.get_user_by_threadid(g.con, thread_id)
+    except TypeError:
+        return redirect(url_for('login'))
+    phrase_nextup = accutils.get_current_nextup_by_threadid(g.con, thread_id)
+
+    return render_template('contenu.html',
+                           user = user,
+                           nextup = phrase_nextup)
+    
+    
 
 @app.route('/settings', methods=['POST'])
 def settings():

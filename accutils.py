@@ -26,6 +26,8 @@ def add_phrase(con, content, users_id):
     return None
 
 def user_adaptator(user):
+    if user is None:
+        return None
     return {"id": user[0],
             "date_created": str(user[1]),
             "first_name": user[2],
@@ -113,6 +115,9 @@ def update_settings(con, user_id, first_name, last_name, username, thread_name, 
 def get_thread_by_userid(con, user_id):
     return thread_adaptator(dbutils.get_thread_by_userid(con, user_id))
 
+def get_user_by_threadid(con, threads_id):
+    return user_adaptator(dbutils.get_user_by_threadid(con, threads_id))
+
 def get_all_categories(con):
     return map(category_adaptator, dbutils.get_all_categories(con))
 
@@ -156,3 +161,10 @@ def delete_phrase(con, users_id, phrases_id):
     dbutils.unbind_threads_phrases(con, threads_id, phrases_id)
     dbutils.delete_phrases_by_id(con, phrases_id)
     return None
+
+def get_current_nextup_by_threadid(con, threads_id):
+    phrase = dbutils.get_current_nextup_by_threadid(con, threads_id)
+    if phrase is None:
+        return None
+    else:
+        return phrase_adaptator(phrase)

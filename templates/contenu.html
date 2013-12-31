@@ -7,7 +7,7 @@
 		</head>
 		
 		<body>
-			
+		  <!--
 			<header>
 				<div id='menu_top'>
 					<span id='titre'>Once a Day</span>
@@ -19,11 +19,22 @@
 					</table>
 				</div>
 			</header>
-			
+		-->
+	          {% include 'header.html' %}
 			<div id='corps_contenu'>
+                          <!--
 				<h2 id='contenu'>"C'est au sommet de la montagne qu'on se sent le plus seul"</h2>
 				<br/>
 				<h3 id='auteur'>La Fouine</h3>
+                                -->
+                          {% if nextup is none %}
+                          Nothing's up today!
+                          {% else %}
+                          <h2 id='contenu'>"{{nextup.content}}"</h2>
+                          <br/>
+                          <h3 id='auteur'>{{user.first_name}} {{user.last_name}}</h3>
+                          {% endif %}
+                          
 			</div>
 			
 			
