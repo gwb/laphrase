@@ -168,3 +168,13 @@ def get_current_nextup_by_threadid(con, threads_id):
         return None
     else:
         return phrase_adaptator(phrase)
+
+def add_thread_to_favorites(con, users_id, threads_id):
+    # TODO: check existence of thread and user
+    if not check_if_exists_favorite(con, users_id, threads_id):
+        dbutils.add_thread_to_favorites(con, users_id, threads_id)
+    return None
+
+def check_if_exists_favorite(con, users_id, threads_id):
+    favorite = dbutils.get_favorite(con, users_id, threads_id)
+    return favorite is not None

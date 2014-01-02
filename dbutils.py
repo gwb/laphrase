@@ -282,3 +282,23 @@ def update_nextup(con, phrases_id, nextup):
                 (nextup, phrases_id))
     return None
     
+def add_thread_to_favorites(con, users_id, threads_id):
+    cur = con.cursor()
+    cur.execute("INSERT INTO favorites ("
+                "date_created,"
+                "threads_id,"
+                "users_id) "
+                "VALUES(%s,%s,%s) ",
+                (datetime.utcnow(),
+                 threads_id,
+                 users_id))
+    return None
+
+def get_favorite(con, users_id, threads_id):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM favorites "
+                "WHERE "
+                "users_id = %s AND "
+                "threads_id = %s ",
+                (users_id, threads_id))
+    return cur.fetchone()

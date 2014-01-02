@@ -132,14 +132,16 @@ def contenu_thread(thread_id):
     if not "logged_in" in session:
         return redirect(url_for('login'))
     try:
-        user = accutils.get_user_by_threadid(g.con, thread_id)
+        auteur = accutils.get_user_by_threadid(g.con, thread_id)
     except TypeError:
         return redirect(url_for('login'))
     phrase_nextup = accutils.get_current_nextup_by_threadid(g.con, thread_id)
 
     return render_template('contenu.html',
-                           user = user,
-                           nextup = phrase_nextup)
+                           auteur = auteur,
+                           nextup = phrase_nextup,
+                           threads_id = thread_id
+                           )
     
     
 
@@ -187,6 +189,19 @@ def switch_nextup(phrases_id):
     app.logger.debug('WARNING - phrases_id = %s' % phrases_id)
     accutils.switch_nextup(g.con, session['user_id'], phrases_id)
     return redirect(url_for('my_account'))
+
+@app.route('/add-favorite')
+def add_favorite():
+    return redirect(url_for('index'))
+
+@app.route('/add-favorite/<int:thread_id>')
+def do_add_favorite(thread_id):
+    if "logged_in" not in session:
+        return redirect(url_for('login'))
+    accutils.add_thread_to_favorites(g.con,
+                                     session['user_id'],
+                                     thread_id)
+    return redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():
