@@ -81,6 +81,22 @@ def add_content(con, content):
     phrases_id = cur.fetchone()[0]
     return phrases_id
 
+def create_thread(con, name, description):
+    cur = con.cursor()
+    cur.execute("INSERT INTO threads ("
+                "date_created,"
+                "name,"
+                "description) "
+                "VALUES(%s,%s,%s) "
+                "RETURNING id",
+                (datetime.utcnow(),
+                 name,
+                 description
+                 ))
+    threads_id = cur.fetchone()[0]
+    return threads_id
+
+
 def bind_content_user(con, phrases_id, users_id):
     cur = con.cursor()
     cur.execute("INSERT INTO users_phrases ("
@@ -93,13 +109,207 @@ def bind_content_user(con, phrases_id, users_id):
                  phrases_id))
     return None
 
-def get_content_by_userid(con, users_id):
+def bind_threads_users(con, threads_id, users_id):
+    cur = con.cursor()
+    cur.execute("INSERT INTO threads_users ("
+                "date_created,"
+                "threads_id,"
+                "users_id) "
+                "VALUES(%s,%s,%s) ",
+                (datetime.utcnow(),
+                 threads_id,
+                 users_id))
+    return None
+
+def bind_threads_phrases(con, threads_id, phrases_id):
+    cur = con.cursor()
+    cur.execute("INSERT INTO threads_phrases ("
+                "date_created,"
+                "threads_id,"
+                "phrases_id) "
+                "VALUES(%s,%s,%s) ",
+                (datetime.utcnow(),
+                 threads_id,
+                 phrases_id))
+    return None
+
+def bind_threads_categories(con, threads_id, categories_id):
+    cur = con.cursor()
+    cur.execute("INSERT INTO threads_categories ("
+                "date_created,"
+                "threads_id,"
+                "categories_id) "
+                "VALUES(%s,%s,%s) ",
+                (datetime.utcnow(),
+                 threads_id,
+                 categories_id))
+    return None
+
+def get_content_by_threadid(con, threads_id):
     cur = con.cursor()
     cur.execute("SELECT * FROM "
                 "phrases AS p, "
-                "users_phrases AS up "
+                "threads_phrases AS tp "
                 "WHERE "
-                "up.users_id = %s AND "
-                "up.phrases_id = p.id ",
+                "tp.threads_id = %s AND "
+                "tp.phrases_id = p.id ",
+                (threads_id,))
+    return cur.fetchall()
+
+def get_thread_by_userid(con, users_id):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM "
+                "threads AS t, "
+                "threads_users AS tu "
+                "WHERE "
+                "tu.users_id = %s AND "
+                "tu.threads_id = t.id ",
+                (users_id,))
+    return cur.fetchone()
+
+def get_user_by_threadid(con, threads_id):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM "
+                "users AS u, "
+                "threads_users AS tu "
+                "WHERE "
+                "tu.threads_id = %s AND "
+                "tu.users_id = u.id ",
+                (threads_id,))
+    return cur.fetchone()
+
+def get_category_by_threadid(con, threads_id):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM "
+                "categories as c, "
+                "threads_categories as tc "
+                "WHERE "
+                "tc.threads_id = %s AND "
+                "tc.categories_id = c.id ",
+                (threads_id,))
+    return cur.fetchone()
+
+def get_category_by_name(con, name):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM categories WHERE name=%s", (name,))
+    return cur.fetchone()
+
+def update_user_by_id(con, user_id, first_name, last_name, username, publication_time):
+    cur = con.cursor()
+    cur.execute("UPDATE users "
+                "SET "
+                "first_name=%s,"
+                "last_name=%s,"
+                "username=%s,"
+                "publication_time=%s "
+                "WHERE id=%s",
+                (first_name, last_name, username, publication_time, user_id))
+    return None
+
+
+def update_thread_by_id(con, thread_id, thread_name, thread_description):
+    cur = con.cursor()
+    cur.execute("UPDATE threads "
+                "SET "
+                "name=%s,"
+                "description=%s "
+                "WHERE id=%s",
+                (thread_name, thread_description, thread_id))
+    return None
+    
+
+def get_all_categories(con):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM categories")
+    return cur.fetchall()
+
+def add_category(con, name):
+    cur = con.cursor()
+    cur.execute("INSERT INTO categories ("
+                "date_created,"
+                "name) "
+                "VALUES(%s,%s) "
+                "RETURNING id",
+                (datetime.utcnow(),
+                 name))
+    return cur.fetchone()[0]
+                
+def unbind_threads_categories(con, thread_id):
+    cur = con.cursor()
+    cur.execute("DELETE FROM threads_categories "
+                "WHERE threads_id = %s",
+                (thread_id,))
+    return None
+
+def unbind_threads_phrases(con, threads_id, phrases_id):
+    cur = con.cursor()
+    cur.execute("DELETE FROM threads_phrases "
+                "WHERE threads_id = %s AND phrases_id = %s",
+                (threads_id, phrases_id))
+    return None
+
+def delete_phrases_by_id(con, phrases_id):
+    cur = con.cursor()
+    cur.execute("DELETE FROM phrases "
+                "WHERE id = %s",
+                (phrases_id,))
+    return None
+
+
+def get_current_nextup_by_threadid(con, threads_id):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM "
+                "phrases AS p, "
+                "threads_phrases AS tp "
+                "WHERE "
+                "tp.threads_id = %s AND "
+                "tp.phrases_id = p.id AND "
+                "p.next_up = %s",
+                (threads_id, True))
+    return cur.fetchone()
+
+def get_phrases_by_id(con, phrases_id):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM phrases WHERE id = %s", (phrases_id,))
+    return cur.fetchone()
+
+def update_nextup(con, phrases_id, nextup):
+    cur = con.cursor()
+    cur.execute("UPDATE phrases "
+                "SET "
+                "next_up=%s "
+                "WHERE id=%s",
+                (nextup, phrases_id))
+    return None
+    
+def add_thread_to_favorites(con, users_id, threads_id):
+    cur = con.cursor()
+    cur.execute("INSERT INTO favorites ("
+                "date_created,"
+                "threads_id,"
+                "users_id) "
+                "VALUES(%s,%s,%s) ",
+                (datetime.utcnow(),
+                 threads_id,
+                 users_id))
+    return None
+
+def get_favorite(con, users_id, threads_id):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM favorites "
+                "WHERE "
+                "users_id = %s AND "
+                "threads_id = %s ",
+                (users_id, threads_id))
+    return cur.fetchone()
+
+def get_favorites_by_userid(con, users_id):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM "
+                "favorites as f, "
+                "threads as t "
+                "WHERE "
+                "f.users_id = %s AND "
+                "f.threads_id = t.id",
                 (users_id,))
     return cur.fetchall()

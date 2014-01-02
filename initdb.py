@@ -23,8 +23,11 @@ def _init_db(con):
     cur = con.cursor()
 
     cur.execute("DROP TABLE IF EXISTS users_phrases")
+    cur.execute("DROP TABLE IF EXISTS threads_users")
     cur.execute("DROP TABLE IF EXISTS statistics")
     cur.execute("DROP TABLE IF EXISTS users")
+    cur.execute("DROP TABLE IF EXISTS favorites")
+    cur.execute("DROP TABLE IF EXISTS threads_phrases")
     cur.execute("DROP TABLE IF EXISTS phrases")
     cur.execute("DROP TABLE IF EXISTS threads_categories")
     cur.execute("DROP TABLE IF EXISTS categories")
@@ -52,12 +55,12 @@ def _init_db(con):
                 "num_down INT)"
                 )
 
-    cur.execute("CREATE TABLE users_phrases ("
-                "id SERIAL PRIMARY KEY, "
-                "date_created TIMESTAMP, "
-                "users_id INT REFERENCES users(id), "
-                "phrases_id INT REFERENCES phrases(id))"
-                )
+    #cur.execute("CREATE TABLE users_phrases ("
+    #            "id SERIAL PRIMARY KEY, "
+    #            "date_created TIMESTAMP, "
+    #            "users_id INT REFERENCES users(id), "
+    #            "phrases_id INT REFERENCES phrases(id))"
+    #            )
 
     cur.execute("CREATE TABLE categories ("
                 "id SERIAL PRIMARY KEY, "
@@ -67,14 +70,37 @@ def _init_db(con):
     cur.execute("CREATE TABLE threads ("
                 "id SERIAL PRIMARY KEY, "
                 "date_created TIMESTAMP, "
-                "name VARCHAR(50))"
+                "name VARCHAR(50), "
+                "description VARCHAR(300))"
                 )
+
+    cur.execute("CREATE TABLE threads_users ("
+                "id SERIAL PRIMARY KEY, "
+                "date_created TIMESTAMP, "
+                "threads_id INT REFERENCES threads(id), "
+                "users_id INT REFERENCES users(id))"
+                )
+
+    cur.execute("CREATE TABLE threads_phrases ("
+                "id SERIAL PRIMARY KEY, "
+                "date_created TIMESTAMP, "
+                "threads_id INT REFERENCES threads(id), "
+                "phrases_id INT REFERENCES phrases(id))"
+                )
+                
 
     cur.execute("CREATE TABLE threads_categories ("
                 "id SERIAL PRIMARY KEY, "
                 "date_created TIMESTAMP, "
                 "threads_id INT REFERENCES threads(id), "
                 "categories_id INT REFERENCES categories(id))"
+                )
+
+    cur.execute("CREATE TABLE favorites ("
+                "id SERIAL PRIMARY KEY, "
+                "date_created TIMESTAMP, "
+                "threads_id INT REFERENCES threads(id), "
+                "users_id INT REFERENCES users(id))"
                 )
                 
     con.commit()

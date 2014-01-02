@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Add Category</h2>
+
+  <form action="{{ url_for('add_category') }}" method=post>
+    <dl>
+        
+      <dt> Name:
+      <dd><input type=text name=name>
+
+      <dd><input type=submit value=send>
+    </dl>
+  </form>
+
+<div>
+  <h3> List of Categories </h3>
+  <ul>
+  {% for category in categories %}
+    <li> <input type=checkbox id={{category.id}}> {{category.name}} </li>
+  {% else %}
+    <li> No Category
+  {% endfor %}
+  </ul>
+</div>
+
+{% endblock %}

@@ -66,10 +66,13 @@ def process_create_account():
 @app.route('/add-content', methods=['POST'])
 def add_content():
     if session['logged_in']:
-        accutils.add_phrase(g.con,
-                            request.form['content'],
-                            session['user_id'])
-        return redirect(url_for('my_account', display="thread"))
+        if not accutils.check_exists_thread(g.con, session['user_id']):
+            return redirect(url_for('my_account'))
+        else:
+            accutils.add_phrase(g.con,
+                                request.form['content'],
+                                session['user_id'])
+            return redirect(url_for('my_account', display="thread"))
 
             
 
@@ -98,18 +101,111 @@ def my_account():
                            "favorites": 'display:none',}
 
         user = accutils.get_user_by_id(g.con, session["user_id"])
- 
+
+        thread = accutils.get_thread_by_userid(g.con, session["user_id"])
+
+        category = accutils.get_category_by_userid(g.con, session["user_id"])
+
+        favorites_info = accutils.get_favorites_info(g.con, session["user_id"])
+
+        if category:
+            category = category["name"]
+
+        if user["publication_time"] not in (None, 'None'):
+            user["hour"], user["minutes"] = user["publication_time"].split(":")[:2]
+
+        
         return render_template('user_account.html',
                                entries=entries,
                                nextup=nextup,
                                display=display,
-                               user=user)
+                               user=user,
+                               thread=thread,
+                               category=category,
+                               favorites=favorites_info)
 
 
 @app.route('/contenu')
 def contenu():
-    return render_template('contenu.html')
+    if not "logged_in" in session:
+        return redirect(url_for('login'))
+    return redirect(url_for('index')) #render_template('contenu.html')
 
+@app.route('/contenu/<int:thread_id>')
+def contenu_thread(thread_id):
+    if not "logged_in" in session:
+        return redirect(url_for('login'))
+    try:
+        auteur = accutils.get_user_by_threadid(g.con, thread_id)
+    except TypeError:
+        return redirect(url_for('login'))
+    phrase_nextup = accutils.get_current_nextup_by_threadid(g.con, thread_id)
+
+    return render_template('contenu.html',
+                           auteur = auteur,
+                           nextup = phrase_nextup,
+                           threads_id = thread_id
+                           )
+    
+    
+
+@app.route('/settings', methods=['POST'])
+def settings():
+    if not "logged_in" in session:
+        return redirect(url_for('login'))
+    else:
+        publication_time = "%s:%s"%(request.form["hour"],
+                                    request.form["minutes"])
+        accutils.update_settings(g.con,
+                                 session['user_id'],
+                                 request.form["first_name"],
+                                 request.form["last_name"],
+                                 request.form["user_name"],
+                                 request.form["thread_name"],
+                                 request.form["thread_category"],
+                                 request.form["thread_description"],
+                                 publication_time)
+        return redirect(url_for('my_account'))
+
+
+@app.route('/add-category', methods=['GET','POST'])
+def add_category():
+    if request.method == 'GET':
+        categories = accutils.get_all_categories(g.con)
+        return render_template("add_category.html",
+                               categories=categories)
+    else:
+        accutils.add_category(g.con, request.form['name'])
+        return redirect(url_for("add_category"))
+                              
+
+@app.route('/category')
+def category():
+    return render_template("categorie.html")
+
+@app.route('/nextup')
+def nextup():
+    return(redirect(url_for('my_account')))
+
+@app.route('/nextup/<int:phrases_id>')
+def switch_nextup(phrases_id):
+    # TODO: check that user is the right one
+    app.logger.debug('WARNING - phrases_id = %s' % phrases_id)
+    accutils.switch_nextup(g.con, session['user_id'], phrases_id)
+    return redirect(url_for('my_account'))
+
+@app.route('/add-favorite')
+def add_favorite():
+    return redirect(url_for('index'))
+
+@app.route('/add-favorite/<int:thread_id>')
+def do_add_favorite(thread_id):
+    if "logged_in" not in session:
+        return redirect(url_for('login'))
+    accutils.add_thread_to_favorites(g.con,
+                                     session['user_id'],
+                                     thread_id)
+    return redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():
@@ -120,6 +216,16 @@ def logout():
     app.logger.debug('WARNING - You were logged out')
     return redirect(url_for('index'))
                            
+
+@app.route('/delete')
+def delete():
+    return redirect(url_for('my_accout'))
+
+@app.route('/delete/<int:phrases_id>')
+def delete_phrase(phrases_id):
+    # TODO check that user is the right one
+    accutils.delete_phrase(g.con, session['user_id'], phrases_id)
+    return redirect(url_for('my_account'))
 
 @app.route('/dump-tables')
 def dump_tables():
