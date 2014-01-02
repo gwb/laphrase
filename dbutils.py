@@ -302,3 +302,14 @@ def get_favorite(con, users_id, threads_id):
                 "threads_id = %s ",
                 (users_id, threads_id))
     return cur.fetchone()
+
+def get_favorites_by_userid(con, users_id):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM "
+                "favorites as f, "
+                "threads as t "
+                "WHERE "
+                "f.users_id = %s AND "
+                "f.threads_id = t.id",
+                (users_id,))
+    return cur.fetchall()

@@ -71,6 +71,14 @@ def category_adaptator(category):
             "date_created": str(category[1]),
             "name": category[2]}
 
+def favinfo_adaptator(favinfo):
+    return {"id": favinfo[0],
+            "threads_id": favinfo[2],
+            "users_id": favinfo[3],
+            "threads_name": favinfo[6],
+            "threads_description": favinfo[7]}
+            
+
 def check_exists_thread(con, user_id):
     thread_id = dbutils.get_thread_by_userid(con, user_id)
     return thread_id is not None
@@ -113,7 +121,11 @@ def update_settings(con, user_id, first_name, last_name, username, thread_name, 
 
 
 def get_thread_by_userid(con, user_id):
-    return thread_adaptator(dbutils.get_thread_by_userid(con, user_id))
+    thread = dbutils.get_thread_by_userid(con, user_id)
+    if thread is not None:
+        return thread_adaptator(thread)
+    else:
+        return None
 
 def get_user_by_threadid(con, threads_id):
     return user_adaptator(dbutils.get_user_by_threadid(con, threads_id))
@@ -122,7 +134,10 @@ def get_all_categories(con):
     return map(category_adaptator, dbutils.get_all_categories(con))
 
 def get_category_by_userid(con, users_id):
-    threads_id = dbutils.get_thread_by_userid(con, users_id)[0]
+    thread = dbutils.get_thread_by_userid(con, users_id)
+    if thread is None:
+        return ""
+    threads_id = thread[0]
     category = dbutils.get_category_by_threadid(con, threads_id)
     if category is not None:
         return category_adaptator(category)
@@ -178,3 +193,16 @@ def add_thread_to_favorites(con, users_id, threads_id):
 def check_if_exists_favorite(con, users_id, threads_id):
     favorite = dbutils.get_favorite(con, users_id, threads_id)
     return favorite is not None
+
+def get_favorites_info(con, users_id):
+    favorites = dbutils.get_favorites_by_userid(con, users_id)
+    if not favorites:
+        return None
+    favinfo_ls = map(favinfo_adaptator, favorites)
+    for favinfo in favinfo_ls:
+        author = user_adaptator(dbutils.get_user_by_threadid(con, favinfo['threads_id']))
+        favinfo['author_first_name'] = author['first_name']
+        favinfo['author_last_name'] = author['last_name']
+        favinfo['author_username'] = author['username']
+    return favinfo_ls
+    

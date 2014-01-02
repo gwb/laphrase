@@ -45,6 +45,28 @@
 	      <th>Abonnés</th>
 	    </tr>
 	  </thead>
+          <tbody>
+           {% if favorites is none %} 
+           <tr>
+	     <td>-</td>
+	     <td>-</td>
+	     <td>-</td>
+	     <td>-</td>
+	     <td>-</td>
+	   </tr>
+           {% else %}
+           {% for favorite in favorites %}
+           <tr>
+             <td>-</td>
+	     <td>-</td>
+	     <td>{{favorite.author_first_name}} {{favorite.author_last_name}}</td>
+	     <td>{{favorite.threads_name}}</td>
+	     <td>-</td>
+           </tr>
+           {% endfor %}
+           {% endif %}
+          </tbody>
+          <!--
 	  <tbody>
 	    <tr class='ligne_impaire'>
 	      <td>hier</td>
@@ -61,6 +83,7 @@
 	      <td>700</td>
 	    </tr>
 	  </tbody>
+          -->
 	</table>
   </div>
       

@@ -106,11 +106,14 @@ def my_account():
 
         category = accutils.get_category_by_userid(g.con, session["user_id"])
 
+        favorites_info = accutils.get_favorites_info(g.con, session["user_id"])
+
         if category:
             category = category["name"]
 
-        if user["publication_time"] is not None:
+        if user["publication_time"] not in (None, 'None'):
             user["hour"], user["minutes"] = user["publication_time"].split(":")[:2]
+
         
         return render_template('user_account.html',
                                entries=entries,
@@ -118,7 +121,8 @@ def my_account():
                                display=display,
                                user=user,
                                thread=thread,
-                               category=category)
+                               category=category,
+                               favorites=favorites_info)
 
 
 @app.route('/contenu')
