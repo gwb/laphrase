@@ -62,7 +62,7 @@ body
 {
 	display:block;
 	position:relative;
-	height: 60px;
+	height: 50px;
 	border:1px solid black;
 	margin:0px;
 	background:rgb(36,36,36);
@@ -260,7 +260,22 @@ th
 
 #corps_contenu
 {
-	min-height:570px;
+	min-height:600px;
+}
+
+
+#corps_contenu h1
+{
+	position:relative;
+	font-family:courier;
+	display: block;
+	top:50px;
+	margin-bottom:-100px;
+	text-align:center;
+	font-weight:400;
+	font-size:30px;
+	color:rgba(180,180,180,0.6);
+	text-shadow: 1px 2px 2px #def, 0 0 0 #000, 1px 2px 2px #def;
 }
 
 
@@ -286,6 +301,7 @@ th
 	display: block;
 	width:600px;
 	margin:auto;
+	margin-bottom:-100px;
 	top:250px;
 	text-align:right;
 	font-weight:400;
