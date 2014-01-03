@@ -22,8 +22,12 @@
 
 			</div>
 			
-                        <div> 	<a href="{{url_for('add_favorite')}}/{{threads_id}}"
-                        class='petit_bouton'>Add to favorites</a> </div>
+                        <div id='add_favs'>
+                        	<a href="{{url_for('add_favorite')}}/{{threads_id}}">
+                        		<img src="../static/img/etoile_eteinte.png" alt='Non favoris'/><br/>
+                        		Add to favorites
+                        	</a>
+                        </div>
 			
 			<footer>
 				<div id='bottom_bar'>

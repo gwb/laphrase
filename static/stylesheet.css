@@ -311,6 +311,17 @@ th
 }
 
 
+#add_favs
+{
+	position:relative;
+	display:block;
+	width:200px;
+	text-align:center;
+	margin:auto;
+	top:-140px;
+}
+
+
 
 
 
