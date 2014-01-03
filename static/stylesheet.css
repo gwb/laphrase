@@ -313,6 +313,31 @@ th
 	
 	
 
+/*********** Mise en page de la page Résultats **********/
+
+#threads_resultats
+{
+	position:relative;
+	margin:auto;
+	display:block;
+	width:800px;
+	text-align:center;
+	margin-top:50px;
+	margin-bottom:50px;
+	border-collapse:collapse;
+}
+
+
+#threads_resultats td
+{
+	width:100px;
+	height:25px;
+}
+
+
+
+
+
 /*********** Mise en page de la page CONTENU **********/
 
 /*
@@ -425,7 +450,7 @@ th
 	width:160px;
 	height:35px;
 	text-align:center;
-	padding-top:10px;
+	padding-top:13px;
 	background:rgba(200,14,31,.5);
 	border-radius:5px;
 	color:white;
