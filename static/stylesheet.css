@@ -308,12 +308,12 @@ th
 
 /*********** Mise en page de la page CONTENU **********/
 
-
+/*
 #corps_contenu
 {
 	min-height:600px;
 }
-
+*/
 
 #corps_contenu h1
 {
@@ -511,7 +511,6 @@ th
 	width:800px;
 	text-align:center;
 	margin-top:50px;
-	margin-bottom:50px;
 	border-collapse:collapse;
 }
 
