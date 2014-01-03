@@ -3,6 +3,16 @@
     <span id='titre'><a href="{{url_for('index')}}">Once a Day</a></span>
     <table id='login'>
       <tr>
+      	<td>
+      		<form id="searchForm">
+      			<fieldset style='border:none;'>
+							<div class="input">
+								<input type="text" name="s" id="s" value="Enter your search" />
+							</div>
+							<input type="submit" id="searchSubmit" value="" />
+						</fieldset>
+					</form>
+				</td>
         {% if session.logged_in %}
         <td>{{session.user_first_name}} {{session.user_last_name}} | </td>
         <td><a href="{{url_for('logout')}}"> Logout </a></td>
