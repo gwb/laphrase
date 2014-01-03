@@ -13,12 +13,18 @@
                           <h1>{{threads_name}} 
                             <div id='add_favs'>
                         	<a href="{{url_for('add_favorite')}}/{{threads_id}}">
-                        		<img src="../static/img/etoile_eteinte.png" alt='Non favoris'/><br/>
+                                  {% if is_fav %}
+                                  <img src="../static/img/etoile_allume.png"
+                        	       alt='Favoris avoris'/><br/>
+                                  {% else %}
+                                  <img src="../static/img/etoile_eteinte.png"
+                        	       alt='Non favoris'/><br/>
+                                  {% endif %}
                         	</a>
                             </div>
                           </h1>
                           {% if nextup is none %}
-                          Nothing's up today!
+                          <h2 id='contenu'> Nothing's up today! </h2>
                           {% else %}
                           <h2 id='contenu'>"{{nextup.content}}"</h2>
                           <br/>

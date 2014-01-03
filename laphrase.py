@@ -142,11 +142,14 @@ def contenu_thread(thread_id):
         return redirect(url_for('login'))
     phrase_nextup = accutils.get_current_nextup_by_threadid(g.con, thread_id)
 
+    is_fav = accutils.check_if_exists_favorite(g.con, session['user_id'], thread_id)
+
     return render_template('contenu.html',
                            auteur = auteur,
                            nextup = phrase_nextup,
                            threads_id = thread_id,
-                           threads_name = threads_name
+                           threads_name = threads_name,
+                           is_fav = is_fav
                            )
     
     
