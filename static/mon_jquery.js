@@ -8,7 +8,7 @@ $(document).ready(function()
 			var page_height = $(document).height();
 			var header_height = $('#menu_top').height();
 			var footer_height = $('footer').height();
-			var corps_height = page_height - header_height - footer_height;
+			var corps_height = page_height - header_height - footer_height-100;
 			$('.corps').css('height',corps_height);
 	}		
 	
