@@ -3,9 +3,9 @@ import urlparse
 import os
 from datetime import datetime
 
-def get_con():
+def get_con(env_var="DATABASE_URL"):
     urlparse.uses_netloc.append("postgres")
-    url = urlparse.urlparse(os.environ["DATABASE_URL"])
+    url = urlparse.urlparse(os.environ[env_var])
     con = psycopg2.connect(
         database=url.path[1:],
         user=url.username,
@@ -313,3 +313,9 @@ def get_favorites_by_userid(con, users_id):
                 "f.threads_id = t.id",
                 (users_id,))
     return cur.fetchall()
+
+def get_thread_by_id(con, threads_id):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM threads WHERE id=%s", (threads_id,))
+    return cur.fetchone()
+

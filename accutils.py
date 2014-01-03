@@ -127,6 +127,13 @@ def get_thread_by_userid(con, user_id):
     else:
         return None
 
+def get_thread_by_id(con, threads_id):
+    thread = dbutils.get_thread_by_id(con, threads_id)
+    if thread is not None:
+        return thread_adaptator(thread)
+    else:
+        return None
+
 def get_user_by_threadid(con, threads_id):
     return user_adaptator(dbutils.get_user_by_threadid(con, threads_id))
 

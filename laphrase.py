@@ -137,6 +137,7 @@ def contenu_thread(thread_id):
         return redirect(url_for('login'))
     try:
         auteur = accutils.get_user_by_threadid(g.con, thread_id)
+        threads_name = accutils.get_thread_by_id(g.con, thread_id)['name']
     except TypeError:
         return redirect(url_for('login'))
     phrase_nextup = accutils.get_current_nextup_by_threadid(g.con, thread_id)
@@ -144,7 +145,8 @@ def contenu_thread(thread_id):
     return render_template('contenu.html',
                            auteur = auteur,
                            nextup = phrase_nextup,
-                           threads_id = thread_id
+                           threads_id = thread_id,
+                           threads_name = threads_name
                            )
     
     
