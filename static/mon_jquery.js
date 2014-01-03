@@ -2,6 +2,19 @@ $(document).ready(function()
 {
 	
 	
+	//===== Fonction de one page site =====//
+	window.onload = function()
+	{
+			var page_height = $(document).height();
+			var header_height = $('#menu_top').height();
+			var footer_height = $('footer').height();
+			var corps_height = page_height - header_height - footer_height-100;
+			$('.corps').css('height',corps_height);
+	}		
+	
+	
+	
+	
 	//===== Mise en place de l'animation de la page LOGIN =====//
 	
 	$('#bouton_connexion').click(
