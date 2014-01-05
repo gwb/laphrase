@@ -157,6 +157,26 @@ def load_table(con, table_values, query, len_table_ref):
             cur.execute(query, table_values)
     return None
 
+def sync_index(con, table_name):
+    """ Checks if the the key index of the table is out of sync (this will
+    almost always be the case since the id is declared as serial). If the
+    index is out of sync, then we sync it.
+    """
+    cur = con.cursor()
+    cur.execute("SELECT * from %s" % table_name)
+    db_first_row = cur.fetchone()
+    if db_first_row is None:
+        return None
+    cur.execute("SELECT nextval('%s_id_seq')" % table_name)
+    db_nextval = cur.fetchone()[0]
+    cur.execute("select MAX(id) from %s" % table_name)
+    data_nextval = cur.fetchone()[0]
+    if int(db_nextval) < int(data_nextval):
+        cur.execute("SELECT setval("
+                    "'%s_id_seq',"
+                    "(SELECT MAX(id) FROM %s))" % (table_name, table_name))
+    return None
+
 def load_all_tables(con, tables_ref, tables_to_load):
     for table_name in tables_ref:
         #if '_' in table_name:
@@ -167,6 +187,7 @@ def load_all_tables(con, tables_ref, tables_to_load):
                        tables_to_load[table_name][i],
                        query,
                        len(tables_ref[table_name]))
+        sync_index(con, table_name)
     return None
 
 
