@@ -4,20 +4,20 @@
     <table id='login'>
       <tr>
       	<td>
-      		<form id="searchForm">
-      			<fieldset style='border:none;'>
-			  <div class="input">
-			    <input type="text"
-				   name="s"
-				   id="s"
-				   value="cherchez un thread" />
-							</div>
-							<input type="submit" id="searchSubmit" value="" />
-						</fieldset>
-					</form>
-				</td>
+      	  <form id="searchForm">
+      	    <fieldset style='border:none;'>
+	      <div class="input">
+		<input type="text"
+		       name="s"
+		       id="s"
+		       value="cherchez un thread" />
+	      </div>
+	      <input type="submit" id="searchSubmit" value="" />
+	    </fieldset>
+	  </form>
+	</td>
         {% if session.logged_in %}
-        <td>{{session.user_first_name}} {{session.user_last_name}} | </td>
+        <td><a href="{{url_for('my_account')}}"> {{session.user_first_name}} {{session.user_last_name}} </a> | </td>
         <td><a href="{{url_for('logout')}}"> Logout </a></td>
         {% else %}
         <td><a href="{{url_for('login')}}"> Login </a></td>

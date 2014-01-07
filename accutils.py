@@ -159,6 +159,11 @@ def add_thread_to_favorites(con, users_id, threads_id):
         dbutils.add_thread_to_favorites(con, users_id, threads_id)
     return None
 
+def remove_thread_from_favorites(con, users_id, threads_id):
+    if check_if_exists_favorite(con, users_id, threads_id):
+        dbutils.remove_thread_from_favorites(con, users_id, threads_id)
+    return None
+
 def check_if_exists_favorite(con, users_id, threads_id):
     favorite = dbutils.get_favorite(con, users_id, threads_id)
     return favorite is not None
@@ -175,3 +180,28 @@ def get_favorites_info(con, users_id):
         favinfo['author_username'] = author['username']
     return favinfo_ls
     
+def check_if_exists_category(con, category_id):
+    return dbutils.check_if_exists(con, "categories", category_id)
+
+def get_category_by_id(con, category_id):
+    category = dbutils.select_from(con,
+                                   table_name="categories",
+                                   by_values=category_id,
+                                   by="id",
+                                   fetchall=False)
+    return category_adaptator(category)
+
+    
+def get_threads_by_categoryid(con, category_id):
+    threads =  map(thread_adaptator,
+                   dbutils.get_threads_by_categoryid(con, category_id))
+    return map(lambda thread: augment_thread_with_author(con, thread),
+               threads)
+
+def augment_thread_with_author(con, thread):
+    user = get_user_by_threadid(con, thread["id"])
+    thread["author_id"] = user["id"]
+    thread["author_first_name"] = user["first_name"]
+    thread["author_last_name"] = user["last_name"]
+    thread["username"] = user["username"]
+    return thread

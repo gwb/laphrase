@@ -3,6 +3,9 @@ import urlparse
 import os
 from datetime import datetime
 
+class DBArgsError(Exception):
+    pass
+
 def get_con(env_var="DATABASE_URL"):
     urlparse.uses_netloc.append("postgres")
     url = urlparse.urlparse(os.environ[env_var])
@@ -294,6 +297,12 @@ def add_thread_to_favorites(con, users_id, threads_id):
                  users_id))
     return None
 
+def remove_thread_from_favorites(con, users_id, threads_id):
+    cur = con.cursor()
+    cur.execute("DELETE FROM favorites WHERE threads_id=%s",
+                (threads_id,))
+    return None
+
 def get_favorite(con, users_id, threads_id):
     cur = con.cursor()
     cur.execute("SELECT * FROM favorites "
@@ -319,3 +328,68 @@ def get_thread_by_id(con, threads_id):
     cur.execute("SELECT * FROM threads WHERE id=%s", (threads_id,))
     return cur.fetchone()
 
+def get_threads_by_categoryid(con, categories_id):
+    cur = con.cursor()
+    cur.execute("SELECT * FROM "
+                "threads as t, "
+                "threads_categories as tc "
+                "WHERE "
+                "tc.categories_id=%s AND "
+                "tc.threads_id=t.id",
+                (categories_id,))
+    return cur.fetchall()
+
+def bind_tables(con, table_name, ids_values, ids):
+    if not len(ids_values) == len(ids):
+        raise DBArgsError("*ids_values* and *ids* arguments should have same lengths")
+    query_begin = "INSERT INTO %s (date_created, %s, %s)" % tuple([table_name] + ids)
+    query_full = query_begin + " VALUES(%s,%s,%s)"
+    cur = con.cursor()
+    cur.execute(query_full, (datetime.utcnow(), ids_values[0], ids_values[1]))
+    return None
+
+def select_from(con, table_name, by_values="", by="", fetchall=True):
+    if not isinstance(by_values, list):
+        by_values = [by_values]
+    if not isinstance(by, list):
+        by = [by]
+    if not len(by_values) == len(by):
+        raise DBArgsError("*by_values* and *by* arguments should have same lengths")
+    if by == [""]:
+        full_query = "SELECT * FROM %s" % table_name
+    else:
+        base_query = "SELECT * FROM %s WHERE %s"
+        where_query = ' AND '.join(["%s=%s" % (by_key, by_value)
+                                    for (by_key, by_value) in zip(by, by_values)])
+        full_query = base_query % (table_name, where_query)
+    
+    cur = con.cursor()
+    cur.execute(full_query)
+    return cur.fetchall() if fetchall else cur.fetchone()
+
+def select_through(con, pivot_table, ref_table, ids_value):
+    tables = pivot_table.split('_')
+    nonref_table = tables[0] if tables[0] != ref_table else tables[1]
+    base_query = "SELECT * FROM %s WHERE %s"
+    from_query = "%s, %s" % (ref_table, pivot_table)
+    where_query_1 = "%s.%s_id=" % (pivot_table, nonref_table)
+    where_query_1 = where_query_1 + "%s"
+    where_query_2 = "%s.%s_id=%s.id"%(pivot_table,
+                                      ref_table,
+                                      ref_table)
+    where_query = "%s AND %s" % (where_query_1, where_query_2)
+    return base_query % (from_query, where_query)
+
+def check_if_exists(con, table_name, by_values, by='id'):
+    if not isinstance(by_values, list):
+        by_values = [by_values]
+    if not isinstance(by, list):
+        by = [by]
+    if not len(by_values) == len(by):
+        raise DBArgsError("*by_values* and *by* arguments should have same lengths")
+    base_query = "SELECT count(*) FROM %s WHERE %s"
+    where_query = ' AND '.join(["%s=%s" % (by_key, by_value)
+                            for (by_key, by_value) in zip(by, by_values)])
+    cur = con.cursor()
+    cur.execute(base_query % (table_name, where_query))
+    return int(cur.fetchone()[0]) > 0

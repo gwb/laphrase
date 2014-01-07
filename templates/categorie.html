@@ -2,13 +2,13 @@
 	<html>
 		<head>
 			<meta charset='UTF-8'/>
-			<title>Categorie - Politique</title>
+			<title>Categorie - {{category.name}}</title>
 			<link rel='Stylesheet' href='../static/stylesheet.css'/>
 		</head>
 		
 		<body>
 			
-			<header>
+			<!--<header>
 				<div id='menu_top'>
 					<span id='titre'>Once a Day</span>
 					<table id='login'>
@@ -19,12 +19,15 @@
 					</table>
 				</div>
 			</header>
-			
+			-->
+                        {% include 'header.html' %}
 			<div id='corps_categorie'>
-				<h1>Politique</h1>
+				<h1>{{category.name}}</h1>
+                                <!--
 				<h2>Vous êtes passionné de politique, cette rubrique est faite pour vous, vous y retrouverez 
 					les publications de nos chroniqueurs....</h2>
-				
+				-->
+                                <h2>{{category.description}}</h2>
 				<table id='threads_categorie'>
 					<tr class='ligne_titre'>
 						<th>Fav</th>
@@ -34,16 +37,42 @@
 						<th width='400px'>Thread</th>
 						<th>Abonnés</th>
 					</tr>
+                                        {% for thread in threads %}
 					<tr class='ligne_impaire'>
 						<td>
-							<a href='#'><img src="../static/img/etoile_eteinte.png" alt='etoile éteinte' width='25px'/></a>
+                                                  <a href="{{url_for('add_favorite')}}/{{thread.id}}?next={{url_for('category_redir')}}/{{category.id}}">
+                                                  {% if thread.is_fav %}
+                                                  <img src="../static/img/etoile_allume.png"
+                        	                       alt='Favoris avoris'/><br/>
+                                                  {% else %}
+                                                  <img src="../static/img/etoile_eteinte.png"
+                        	                       alt='Non favoris'/><br/>
+                                                  {% endif %}
+                                                  </a>
+                                                  <!--
+						  <a href='#'><img src="../static/img/etoile_eteinte.png"
+							           alt='etoile
+							           éteinte'
+							           width='25px'/></a>
+                                                  -->
 						</td>
-						<td>hier</td>
-						<td>5 min</td>
-						<td>Enkidou</td>
-						<td>Les Chroniques de la Téranga</td>
-						<td>200</td>
+						<td>-</td>
+						<td>-</td>
+						<td>{{thread.author_first_name}} {{thread.author_last_name}}</td>
+						<td>{{thread.name}}</td>
+						<td>-</td>
 					</tr>
+                                        {% else %}
+                                        <tr>
+                                          <td> - </td>
+                                          <td> - </td>
+                                          <td> - </td>
+                                          <td> - </td>
+                                          <td> - </td>
+                                          <td> - </td>
+                                        </tr>
+                                        {% endfor %}
+                                        <!--
 					<tr>
 						<td>
 							<a href='#'><img src="../static/img/etoile_allume.png" alt='etoile allumé' width='25px'/></a>
@@ -74,6 +103,7 @@
 						<td>Dakar Gossip</td>
 						<td>1100</td>
 					</tr>
+                                        -->
 				</table>
 			</div>
 			

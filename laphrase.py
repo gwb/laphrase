@@ -152,7 +152,25 @@ def contenu_thread(thread_id):
                            is_fav = is_fav
                            )
     
+@app.route('/category')
+def category_redir():
+    return redirect(url_for('index'))
+
+@app.route('/category/<int:category_id>')
+def category_list(category_id):
+    if not accutils.check_if_exists_category(g.con, category_id):
+        return redirect(url_for('index'))
+    else:
+        category = accutils.get_category_by_id(g.con, category_id)
+        threads = accutils.get_threads_by_categoryid(g.con, category_id)
+        for thread in threads:
+            thread["is_fav"] = accutils.check_if_exists_favorite(g.con, session['user_id'], thread["id"])
+        return render_template('categorie.html',
+                               category=category,
+                               threads=threads)
     
+
+
 
 @app.route('/settings', methods=['POST'])
 def settings():
@@ -207,10 +225,21 @@ def add_favorite():
 def do_add_favorite(thread_id):
     if "logged_in" not in session:
         return redirect(url_for('login'))
-    accutils.add_thread_to_favorites(g.con,
-                                     session['user_id'],
-                                     thread_id)
-    return redirect(url_for('index'))
+    is_fav = accutils.check_if_exists_favorite(g.con, session['user_id'], thread_id)
+    if not is_fav:
+        accutils.add_thread_to_favorites(g.con,
+                                         session['user_id'],
+                                         thread_id)
+    else:
+        # check that the user logged in is the one to which the
+        # favorite belongs
+        accutils.remove_thread_from_favorites(g.con,
+                                              session["user_id"],
+                                              thread_id)
+    if 'next' in request.args:
+        return redirect(request.args['next'])
+    else:
+        return redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():

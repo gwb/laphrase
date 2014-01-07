@@ -12,7 +12,7 @@
 			<div id='corps_contenu' class='corps'>
                           <h1>{{threads_name}} 
                             <div id='add_favs'>
-                        	<a href="{{url_for('add_favorite')}}/{{threads_id}}">
+                        	<a href="{{url_for('add_favorite')}}/{{threads_id}}?next={{url_for('contenu')}}/{{threads_id}}">
                                   {% if is_fav %}
                                   <img src="../static/img/etoile_allume.png"
                         	       alt='Favoris avoris'/><br/>
