@@ -4,6 +4,8 @@ import datetime
 from collections import OrderedDict
 from optparse import OptionParser
 import sys
+import urlparse
+import os
 
 def get_con_1():
     con = psycopg2.connect(
@@ -22,6 +24,23 @@ def get_con_2():
         password="",
         port="5432")
     return con
+
+
+def get_dburl():
+        urlparse.uses_netloc.append("postgres")
+        url = urlparse.urlparse(os.environ["DATABASE_URL"])
+        return url
+
+def get_con(url):
+    con = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        host=url.hostname,
+        password=url.password,
+        port=url.port
+        )
+    return con
+
 
 db_tables = OrderedDict()
 
@@ -199,12 +218,18 @@ def get_options(argv):
                       help="Dumps content of database into file")
     parser.add_option("--load", dest="filename_in", default="",
                       help="Loads content of file into database")
+    parser.add_option("--heroku", action="store_true", dest="heroku", default=False,
+                      help="Changes connection setup for Heroku")
     (options, args) = parser.parse_args()
     return (options, args)
 
 if __name__ == "__main__":
     options, args = get_options(sys.argv)
-    con = get_con_1()
+    if options.heroku:
+        url = get_dburl()
+        con = get_con(url)
+    else:
+        con = get_con_1()
     if options.reset:
         drop_all_tables(con, db_tables)
         create_all_tables(con, db_tables)
