@@ -205,3 +205,4 @@ def augment_thread_with_author(con, thread):
     thread["author_last_name"] = user["last_name"]
     thread["username"] = user["username"]
     return thread
+

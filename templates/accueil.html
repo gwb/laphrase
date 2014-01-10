@@ -1,86 +1,55 @@
 <!DOCTYPE html>
-	<html>
-		<head>
-			<meta charset='UTF-8'/>
-			<title>Page d'Accueil</title>
-			<link rel='Stylesheet' href="{{url_for('static', filename='stylesheet.css') }}"/>
-		</head>
-		
-		<body>
-		  {% include 'header.html' %}
-			
-			<div id='corps_accueil'>
-				<h1>Once a Day</h1>
-				<h2>Votre information favorite, en une phrase, en une fois...</h2>
-				
-				<table id='categories'>
-					<tr>
-						<td>
-							<div class='box_categorie'>
-								<span>Politique</span>
-								Vous êtes passionné de politique, cette rubrique est faite pour vous, vous y retrouverez 
-								les publications de nos chroniqueurs....
-							</div>
-						</td>
-						<td>
-							<div class='box_categorie'>
-								<span>Economie</span>
-								Vous êtes passionné de politique, cette rubrique est faite pour vous, vous y retrouverez 
-								les publications de nos chroniqueurs....
-							</div>
-						</td>
-						<td>
-							<div class='box_categorie'>
-								<span>Sport</span>
-								Vous êtes passionné de politique, cette rubrique est faite pour vous, vous y retrouverez 
-								les publications de nos chroniqueurs....
-							</div>
-						</td>
-						<td>
-							<div class='box_categorie'>
-								<span>Politique</span>
-								Vous êtes passionné de politique, cette rubrique est faite pour vous, vous y retrouverez 
-								les publications de nos chroniqueurs....
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class='box_categorie'>
-								<span>Politique</span>
-								Vous êtes passionné de politique, cette rubrique est faite pour vous, vous y retrouverez 
-								les publications de nos chroniqueurs....
-							</div>
-						</td><td>
-							<div class='box_categorie'>
-								<span>Politique</span>
-								Vous êtes passionné de politique, cette rubrique est faite pour vous, vous y retrouverez 
-								les publications de nos chroniqueurs....
-							</div>
-						</td><td>
-							<div class='box_categorie'>
-								<span>Politique</span>
-								Vous êtes passionné de politique, cette rubrique est faite pour vous, vous y retrouverez 
-								les publications de nos chroniqueurs....
-							</div>
-						</td><td>
-							<div class='box_categorie'>
-								<span>Politique</span>
-								Vous êtes passionné de politique, cette rubrique est faite pour vous, vous y retrouverez 
-								les publications de nos chroniqueurs....
-							</div>
-						</td>
-					</tr>
-				</table>
-			</div>
-			
-			
-			<footer>
-				<div id='bottom_bar'>
-					<p>Powered by : Gangsta-Business Inc.</p>
-				</div>
-			</footer>
-			
-			
-		</body>
+<html>
+  <head>
+    <meta charset='UTF-8'/>
+    <title>Page d'Accueil</title>
+    <link rel='Stylesheet' href="{{url_for('static', filename='stylesheet.css') }}"/>
+    <script src="../static/jquery.js"></script>
+    <script src="../static/mon_jquery.js"></script>
+
+	  </head>
+	  
+	  <body>
+	    {% include 'header.html' %}
+	    
+	    <div id='corps_accueil'>
+	      <h1>Once a Day</h1>
+	      <h2>Votre information favorite, en une phrase, en une fois...</h2>
+	      
+	      <table id='categories'>
+		<tr>
+                  {% for category in categories1 %}
+                  <td>
+                    <div class='box_categorie'>
+                      <span> {{category.name}} </span>
+                      {{category.description}}
+                    </div>
+                  </td>
+                  {% endfor %}
+
+		</tr>
+		<tr>
+                  {% for category in categories2 %}
+                  <td>
+                    <div class='box_categorie'>
+                      <span> {{category.name}} </span>
+                      {{category.description}}
+                    </div>
+                  </td>
+                  {% endfor %}
+
+		</tr>
+	      </table>
+	    </div>
+	    
+	    
+	    <footer>
+	      <div id='bottom_bar'>
+		<p>Powered by : Gangsta-Business Inc.</p>
+	      </div>
+	    </footer>
+	    
+	    
+	  </body>
 	</html>
+        

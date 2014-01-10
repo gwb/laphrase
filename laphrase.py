@@ -29,7 +29,12 @@ def teardown_request(exception):
 
 @app.route('/')
 def index():
-    return render_template("accueil.html")
+    categories = accutils.get_all_categories(g.con)
+    categories1 = categories[:3]
+    categories2 = categories[3:]
+    return render_template("accueil.html",
+                           categories1 = categories1,
+                           categories2 = categories2)
 
 @app.route('/login')
 def login():

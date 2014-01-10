@@ -16,6 +16,7 @@ $(document).ready(function()
 	
 	
 	//===== Mise en place de la box de recherche =====//
+    $(document).load(function(){
 	 var input = $('input#s');
     var divInput = $('div.input');
     var width = divInput.width();
@@ -72,6 +73,7 @@ $(document).ready(function()
             }
         }
     });
+    })
     //=========//
 	
 	
