@@ -1,5 +1,6 @@
 import dbutils
 from adaptators import user_adaptator, phrase_adaptator, thread_adaptator, category_adaptator, favinfo_adaptator
+import datetime
 
 
 class DBLogicError(Exception):
@@ -206,3 +207,17 @@ def augment_thread_with_author(con, thread):
     thread["username"] = user["username"]
     return thread
 
+
+def get_diff_in_seconds(ref_time, pub_time):
+    tmp_pub_datetime = datetime.datetime.strptime(pub_time, '%H:%M:%S')
+    true_pub_datetime = datetime.datetime(ref_time.year,
+                                          ref_time.month,
+                                          ref_time.day,
+                                          tmp_pub_datetime.hour,
+                                          tmp_pub_datetime.minute,
+                                          tmp_pub_datetime.second)
+    if true_pub_datetime > ref_time:
+        timediff = true_pub_datetime - ref_time
+    else:
+        timediff = ref_time - true_pub_datetime
+    return timediff.seconds

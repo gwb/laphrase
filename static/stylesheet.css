@@ -167,6 +167,13 @@ footer
 
 /*********** Mise en page de l'ACCUEIL **********/
 
+#corps_accueil 
+{
+    display:block;
+    width:1000px;
+    margin:auto;
+}
+
 h1
 {
 	position:relative;
@@ -221,6 +228,10 @@ h2
 	padding:20px 10px 20px 10px;
 	height:140px;
 	overflow:hidden;
+        width:200px;
+        display:inline-block;
+        color:black;
+        text-align:center;
 }
 
 
@@ -246,8 +257,9 @@ h2
 
 
 
-/*********** Mise en page de la page CATEGORIE **********/
 
+
+/*********** Mise en page de la page CATEGORIE **********/
 
 #corps_categorie
 {

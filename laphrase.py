@@ -3,6 +3,7 @@ import dbutils
 import accutils
 import urlparse
 import json
+import datetime
 
 # GLOBAL SETUP - - - - - -
 
@@ -33,6 +34,7 @@ def index():
     categories1 = categories[:3]
     categories2 = categories[3:]
     return render_template("accueil.html",
+                           categories = categories,
                            categories1 = categories1,
                            categories2 = categories2)
 
@@ -142,19 +144,30 @@ def contenu_thread(thread_id):
         return redirect(url_for('login'))
     try:
         auteur = accutils.get_user_by_threadid(g.con, thread_id)
-        threads_name = accutils.get_thread_by_id(g.con, thread_id)['name']
+        thread = accutils.get_thread_by_id(g.con, thread_id)
+        threads_name = thread['name']
+        threads_description = thread['description']
     except TypeError:
         return redirect(url_for('login'))
     phrase_nextup = accutils.get_current_nextup_by_threadid(g.con, thread_id)
-
+    
     is_fav = accutils.check_if_exists_favorite(g.con, session['user_id'], thread_id)
 
+    
+    cur_time = datetime.datetime.utcnow()
+    timediff = accutils.get_diff_in_seconds(cur_time, auteur['publication_time'])
+    app.logger.debug("TIMEDIFF : %s" % timediff)
+
+    do_publish = timediff < 900 # 900 sec == 15 minutes
+    
     return render_template('contenu.html',
                            auteur = auteur,
                            nextup = phrase_nextup,
                            threads_id = thread_id,
                            threads_name = threads_name,
-                           is_fav = is_fav
+                           threads_description = threads_description,
+                           is_fav = is_fav,
+                           do_publish = do_publish
                            )
     
 @app.route('/category')

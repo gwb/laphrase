@@ -1,35 +1,46 @@
 <!DOCTYPE html>
-	<html>
-		<head>
-			<meta charset='UTF-8'/>
-			<title>Categorie - Politique</title>
-			<link rel='Stylesheet' href='../static/stylesheet.css'/>
-		</head>
-		
-		<body>
+<html>
+  <head>
+    <meta charset='UTF-8'/>
+    <title>Categorie - Politique</title>
+    <link rel='Stylesheet' href='../static/stylesheet.css'/>
+    <script src="../static/jquery.js"></script>
+    <script src="../static/mon_jquery.js"></script>
+  </head>
+	  
+	  <body>
+            
+	    {% include 'header.html' %}
+	    <div id='corps_contenu' class='corps'>
+              <h1>{{threads_name}} 
+                <div id='add_favs'>
+                  <a href="{{url_for('add_favorite')}}/{{threads_id}}?next={{url_for('contenu')}}/{{threads_id}}">
+                    {% if is_fav %}
+                    <img src="../static/img/etoile_allume.png"
+                         alt='Favoris avoris'/><br/>
+                    {% else %}
+                    <img src="../static/img/etoile_eteinte.png"
+                         alt='Non favoris'/><br/>
+                    {% endif %}
+                  </a>
+                </div>
+              </h1>
+              {% if nextup is none %}
+              <h2 id='contenu'> Nothing's up today! </h2>
+              {% else %}
+              
+              {% if do_publish %}
+              <h2 id='contenu'>"{{nextup.content}}"</h2>
+              <br/>
+              <h3 id='auteur'>{{auteur.first_name}} {{auteur.last_name}}</h3>
+              
+              {% else %}
+              <h2 id='contenu'> {{threads_description}}</h2>
+              <h3 id='auteur'>{{auteur.first_name}}
+              {{auteur.last_name}} </h3>
+              {% endif %}
 
-	          {% include 'header.html' %}
-			<div id='corps_contenu' class='corps'>
-                          <h1>{{threads_name}} 
-                            <div id='add_favs'>
-                        	<a href="{{url_for('add_favorite')}}/{{threads_id}}?next={{url_for('contenu')}}/{{threads_id}}">
-                                  {% if is_fav %}
-                                  <img src="../static/img/etoile_allume.png"
-                        	       alt='Favoris avoris'/><br/>
-                                  {% else %}
-                                  <img src="../static/img/etoile_eteinte.png"
-                        	       alt='Non favoris'/><br/>
-                                  {% endif %}
-                        	</a>
-                            </div>
-                          </h1>
-                          {% if nextup is none %}
-                          <h2 id='contenu'> Nothing's up today! </h2>
-                          {% else %}
-                          <h2 id='contenu'>"{{nextup.content}}"</h2>
-                          <br/>
-                          <h3 id='auteur'>{{auteur.first_name}} {{auteur.last_name}}</h3>
-                          {% endif %}
+              {% endif %}
                           
 
 			</div>
@@ -42,8 +53,7 @@
 			</footer>
 			
 			
-			<script src="../static/jquery.js"></script>
-			<script src="../static/mon_jquery.js"></script>
+
 			
 			<script>
 				$(document).ready(

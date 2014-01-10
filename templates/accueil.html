@@ -16,6 +16,7 @@
 	      <h1>Once a Day</h1>
 	      <h2>Votre information favorite, en une phrase, en une fois...</h2>
 	      
+              <!--
 	      <table id='categories'>
 		<tr>
                   {% for category in categories1 %}
@@ -40,9 +41,20 @@
 
 		</tr>
 	      </table>
-	    </div>
+              -->
+
+            
+	    {% for category in categories %}
+            <a href="{{ url_for('category_redir') }}/{{category.id}}">
+              <div class='box_categorie'>
+                <span> {{category.name}} </span>
+                {{category.description}}
+              </div>
+            </a>
+            {% endfor %}
 	    
-	    
+            </div>
+
 	    <footer>
 	      <div id='bottom_bar'>
 		<p>Powered by : Gangsta-Business Inc.</p>
